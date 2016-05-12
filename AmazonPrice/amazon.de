@@ -76,11 +76,11 @@ def load_url(url, timeout, ASIN):
 	if "priceblock_ourprice" in price:	
 		tree = html.fromstring(price)
 		price1 = float(tree.xpath(XPATH_SELECTOR)[0].text[3:].replace(',','.'))
-		print datetime.datetime.now(),price1
+		print datetime.datetime.now(),ASIN,price1
 		amdate = datetime.datetime.now()
 		info = str(amdate) +"	"+ str(price1) +"	"+ ASIN +"\n"
-		if (price1 < 60):
-			if (num > 2):
+		if (price1 < 40):
+			if (num > 20):
 				udp_send(ASIN)
 				global num
 				num = 1
@@ -90,9 +90,9 @@ def load_url(url, timeout, ASIN):
 		else:
 			return	
 	else:
-		print datetime.datetime.now(),"NOTHING"
+		print datetime.datetime.now(),ASIN,"NOTHING"
 while True: 
-	with futures.ThreadPoolExecutor(max_workers=2) as executor:
+	with futures.ThreadPoolExecutor(max_workers=1) as executor:
 	    num += 1
 	    future_to_url = dict((executor.submit(load_url, url, 60, ASIN), url)
 				 for url in URLS)

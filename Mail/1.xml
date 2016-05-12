@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=2.0"/>
+    <meta name="MobileOptimized" content="240"/>
+    <link href="http://www.sinaimg.cn/rny/sinamail-wap/css/140529/style.css" rel="stylesheet" type="text/css" />
+    <title>新浪手机邮箱3G版</title>
+</head>
+<body>
+<div class="wrap">
+    <a name="top"></a>
+    <div class="head"><a href="/basic/?sid=20a10e8f08aea714a19b342c22e5955da&vt=3"><img src="http://www.sinaimg.cn/rny/sinamail-wap/images/logo.png" /></a></div><div class="main">
+    <div class="docList">
+        <div class="funcBarTop"><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=new">收信</a><span>|</span><a href="/basic/writemail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3">写信</a><span>|</span><a href="/basic/findmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3">查找</a></div>
+           <div class="docListConn wordwrap">
+                    <div class="cn"><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=new">收件夹(3)</a></div>
+                    <div class="cn"><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&type=1&fid=all">未读邮件(3)</a></div>
+                                                                                                                                                                                                                                            <div class="cn "><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=cur">草稿夹</a></div>
+                                                                                                                                    <div class="cn "><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=out">已发送</a></div>
+                                                                                                                                    <div class="cn "><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=subs">订阅邮件</a></div>
+                                                                                                                                    <div class="cn "><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=tmp">已删除</a></div>
+                                                                                                                                    <div class="cn "><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=unk">垃圾邮件</a></div>
+                                                                                                                                                                            <div class="cn "><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=74">网站通知</a></div>
+                                                                                                                                    <div class="cn "><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=75">订单账单</a></div>
+                                                                                                                                    <div class="cn "><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=76">社交网络</a></div>
+                                                                                                                                    <div class="cn "><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=77">订阅资讯</a></div>
+                                                                                                                                    <div class="cn "><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=73">商讯信息</a></div>
+                                                                                    <div class="cn"><a href="/basic/listmail.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3&fid=all">所有邮件(3)</a></div>
+            </div>
+    </div>
+</div>
+<div class="foot">
+        <p>lffhtr@sina.com，<a href="/basic/logout.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3">退出</a></p>
+        <p></p>
+    <p><a href="/basic/about.php?sid=20a10e8f08aea714a19b342c22e5955da&vt=3">帮助</a>&nbsp;[04-16 20:04]</p>
+</div>
+</div>
+</body>
+</html>

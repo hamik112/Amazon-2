@@ -1,0 +1,516 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>转运四方-海淘首选转运公司</title>
+    
+
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
+<meta name="renderer" content="webkit">
+    <link href="http://img.transrush.com/css/v2.0/p/track.css" rel="stylesheet" type="text/css" />
+    <!--<script type="text/javascript" src='http://img.transrush.com/js/v2.0/n/search.js'> </script>-->
+    <link rel="stylesheet" href="http://img.transrush.com/css/v2.0/n/main.css" />
+    <link rel="stylesheet" href="http://img.transrush.com/css/v2.0/n/my_transfer.css" />
+    <script src="http://www.transrush.com/Controls/Script.aspx"></script>
+    <!--[if lt IE 9]>
+        <script src="http://img.transrush.com/js/lib/html5.min.js"></script>
+        <![endif]-->
+    <script src="http://img.transrush.com/js/lib/require.min.js" data-main="main"></script>
+
+    <script type="text/javascript">
+        window.navIndex = 0;
+    </script>
+    <style>
+        .track-list.end
+        {
+            background-positionl: 430px 27px !important;
+        }
+    </style>
+</head>
+<body>
+    <form name="form1" method="post" action="LogisticsTransferTrace.aspx?code=DD160406643717&amp;vcode=NFZJ" id="form1">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<div>
+
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="Yb0xJPfnrXU/z3bvOt+PCEQvhALRXmknxJ7CBMPu9YZpto5B1alTDY5/4HwwidFuuGjCAtAeSsRMiZw6xP6f73A8O3/vIICqzDCJaNnu3vCRKamAhjWH4ttkLOdOKhbkyZWRKA==" />
+</div>
+    
+
+<!-- 会员功能是否上线 -->
+<script type="text/javascript">window.IsgradeUp = 'True';</script>
+
+<!-- header -->
+<div id="header">
+    <!-- topBar -->
+    <div class="topBar">
+        <!-- 公告 -->
+        <div class="wrap bulletin hide">
+            <h3><span class="icon icon-orangeNotice"></span><span class="middle">重要公告</span></h3>
+            <div class="cont"><p color="red">
+	<span style="white-space:nowrap;font-size:16px;"><span style="font-size:16px;color:#E53333;"><span style="white-space:nowrap;"> </span></span></span> 
+</p>
+<div>
+	<span style="font-size:16px;color:#E53333;"><strong> 
+	<div>
+		&nbsp;<strong style="color:#E53333;font-size:16px;line-height:24px;white-space:normal;">2016年4月8日起，<strong style="color:#E53333;font-size:16px;line-height:24px;white-space:normal;">我司将按照</strong></strong>最新跨境电子商务零售进口税收政策执行&gt;&gt;<a href="http://www.transrush.com/Info/NewsDetail.aspx?ID=529" target="_blank">详情请查看</a><br />
+<br />
+	</div>
+</strong></span><span style="font-size:16px;"><strong><span style="color:#E53333;"></span></strong><a href="http://www.transrush.com/Info/NewsDetail.aspx?ID=529" target="_blank"><span style="color:#E53333;"><u><strong></strong></u></span><span style="color:#E53333;"><u><strong></strong></u></span></a></span> 
+</div></div>
+            <span class="icon icon-orangeClose"></span>
+        </div>
+    </div>
+    <!-- banner -->
+    <div class="banner hide" style="background-color: ;">
+        <a target="_blank" href=""><img src=""></a>
+        <span class="icon icon-orangeClose"></span>
+    </div>
+    <!-- navBar -->
+    <div class="navBar">
+        <div class="wrap clearfix">
+            <!-- logo -->
+            <div class="fl brand">
+                
+                    <a href="/"><img src="http://imgs.transrush.com/File/Images/SiteAd/2016/05/06/20160506181259sdlm7.jpg" title="递四方速递" alt="递四方速递"></a>
+                
+            </div>
+            <!-- navigation -->
+            <div class="fl navigation">
+                <div class="stick hide"></div>
+                <ul class="clearfix">
+                    <li><a href="/">首 页</a></li>
+                    <li><a href="/Member/MyParcel.aspx">我的转运</a></li>
+                    <li>
+                        <a href="javascript:;">惠转运<span class="icon icon-solidGrayDownArrow"></span></a>
+                        <ol class="hide" style="width: 100px;">
+                            <li><a target="_blank" href="/info/Active.aspx" >活动专区</a></li>
+                            <li><a target="_blank" href="http://www.haitaocheng.com/">海淘直购</a></li>
+                            <li><a target="_blank" href="http://www.rebatesme.com/zh/ex-rebates-4px/?uid=33913">快速返利</a></li>
+                        </ol>
+                    </li>
+                    <li>
+                        <a href="javascript:;">产品与服务<span class="icon icon-solidGrayDownArrow"></span></a>
+                        <ol class="hide" style="width: 132px;">
+                            <li><a target="_blank" href="/Member/MyGradePrivilege.aspx">会员特权</a></li>
+                            <li><a target="_blank" href="/Info/ProductAndPrice.aspx">产品与价格</a></li>
+                            <li><a target="_blank" href="/Info/PageOne.aspx?ID=47">集运出口</a></li>
+                            <li><a target="_blank" href="/Info/SuccessfulCases.aspx">解决方案</a></li>
+                        </ol>
+                    </li>
+                    <li class="news">
+                        <a href="javascript:;">新手攻略<span class="icon icon-solidGrayDownArrow"></span></a>
+                        <ol class="hide" style="width: 116px;">
+                            <li><a target="_blank" href="/PublicPage/HaiTaoTutorial.aspx">转运预报教程</a></li>
+                            <li><a target="_blank" href="/Info/NewsDetails.aspx?ID=19">保险与理赔</a></li>
+                            <li><a target="_blank" href="/Info/NewsDetails.aspx?ID=76">禁运物品</a></li>
+                            <li><a target="_blank" href="/Info/Help.aspx">常见问题</a></li>
+                        </ol>
+                    </li>
+                </ul>
+            </div>
+            <!-- 用户信息 -->
+            <div class="fr top-user-info" id="topUserInfoWrap">
+                <a class="top-login" href="http://passport.transrush.com/Login.aspx">登录</a><span> | </span><a class="top-register" href="http://passport.transrush.com//Register.aspx">注册</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/x-jquery-tmpl" id="topUserInfoTmpl">
+    
+    
+    
+</script>
+    <div class="my-transfer">
+        <div class="wrap">
+            <div class="main">
+                <div id="divNotice" class="notice">
+                    <span class="icons"></span>
+                    <p>
+                        公告：</p>
+                    <p id="txtNoticeContent">尊敬的转运四方客户：
+
+      您好，德国法兰克福仓库4月19日出库的IPS由于航班延误导致转运延迟。我司正与航空公司协商，尽快安排货物飞回国内，请各位用户耐心等待，给各位用户造成的不便敬请谅解，感谢各位的支持和谅解。</p>
+                </div>
+                <div class="search-box clearfix">
+                    <label for="searchInput">
+                        轨迹查询</label>
+                    <div class="input-box" id="searchPlacehoder">
+                        <div class="placeholder" placeholder="">
+                            输入你的物流号或订单号</div>
+                        <input class="placeholder" type="text" name="textfield" id="txtSearchText" placeholder=""
+                            value="DD160406643717" />
+                        <a class="search" href="javascript:;" onclick="return Search(this);" id="FindPackage">
+                            <span>查询</span></a>
+                    </div>
+                    <div class="input-box" style="margin-left: 132px; border: none; margin-top: 20px;
+                        box-shadow: none" id="searchVefycode">
+                        <div class="placeholder" placeholder="">
+                            来，输个验证码呗</div>
+                        <input class="placeholder" type="text" name="textfield" id="txtVefycode" placeholder=""
+                            maxlength="4" style="width: 100px">
+                        <img src="../common/ValidateCode.aspx" style="height: 42px; cursor: pointer" alt="校验码"
+                            id="imgCheckCode" />
+                    </div>
+                </div>
+                <div class="track-header">
+                    <p>
+                        运单号：<span id="lblCode">412311620136</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                    <p id="plbDomesticDeliveryID">
+                        国内派送公司：<span id="lbDomesticDeliveryID">天天快递</span>
+                    </p>
+                    <p id="plbDomesticDeliveryCode">
+                        国内派送单号：<span id="lbDomesticDeliveryCode">998027054093</span></p>
+                    <p>
+                        轨迹详情（<span class="gray">轨迹时间为北京时间</span>）：</p>
+                </div>
+                <div id="divSPL" style="display: none; color: #019fe8; padding-bottom: 10px;
+                    padding-left: 238px;">
+                    该订单为分箱包裹，分箱后各包裹商家物流号分别为：
+                    
+                </div>
+                <div class='track-list  current'><div class='track-left'><div class='track-of-time'>2016-05-05 21:23:36</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>快件由东莞分拨中心发往无锡集散</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-05-05 21:11:51</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>快件到达东莞分拨中心，上一站是东莞分拨陆运组，扫描员是过磅5</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-05-05 16:00:50</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>快件由东莞长安二站(0769-82381507，0769-82381508)发往东莞分拨中心</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-05-03 21:10:15</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>广州 已清关完成</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-05-03 19:46:15</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>广州 货物正在清关，等候海关放行</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-05-03 16:46:15</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>广州 等候海关查验</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-05-03 14:00:59</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>中国港口 正在送往清关口岸</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-04-30 17:17:28</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>中国港口 包裹从港口提取,转往海关监管仓库</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-04-30 11:40:35</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>中国港口 货物到达港口</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-04-23 13:35:07</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>完成支付</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-04-19 09:45:40</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>日本 货物离开起运港</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-04-18 15:00:15</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>日本 海关已经放行</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-04-17 14:22:44</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>日本 货物正在清关，等候海关放行</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-04-16 09:15:00</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>日本 等候海关查验</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-04-11 09:59:50</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>离开海外仓库</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-04-06 10:50:56</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>到达海外仓库</div></div></div></div><div class='track-list '><div class='track-left'><div class='track-of-time'>2016-04-05 16:05:40</div></div><div class='track-right'><div class='track-text-box'><div class='arrow-top'></div><div class='arrow-bottom'></div><span class='top-left'></span><span class='top-right'></span><span class='bottom-left'></span><span class='bottom-right'></span><div class='track-text'>订单信息已收到</div></div></div></div>
+                <div id="divKuaiDi100" class="separated-line">
+                    <span class="line"></span>
+                    <div id="FindBefore">
+                        <span class="dics-left"></span><span class="dics-right"></span><a href="http://www.kuaidi100.com/all/ups.shtml?mscomnu=412311620136" id="linkKuaiDi100" target="_blank" style="font-size: 13px; text-decoration: none">【点击获取入库前的轨迹】</a>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 50px;">
+                    <p style="padding-bottom: 20px;">
+                        <img src="http://img.transrush.com//images/v2.0/n/baby-QRcode.jpg"></p>
+                    <p>
+                        关注转运四方服务号，随时随地掌握海淘包裹动态，不上电脑手机也能轻松搞定~</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="hdfFirstLoad" id="hdfFirstLoad" />
+    
+
+<!-- 底部 Start -->
+<div class="clear"></div>
+<div class="footer">
+    <!-- <div class="friend-link">
+        <dl class="wrap clearfix">
+            <dt>递四方集团：</dt>
+            <dd>
+            
+                <a id="Transrush4PX1" href="http://www.4px.com" target="_blank" style="border:none" title="递四方集团LOGO">
+                    <img src='http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/20150122213942uake0.jpg'/>
+                </a>
+                
+                <a id="Transrush4PX2" href="http://express.4px.com/" target="_blank" style="border:none" title="递四方速递">
+                    <img src='http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/20150122213645vdzv0.jpg'/>
+                </a>
+                
+                <a id="Transrush4PX3" href="http://www.haitaocheng.com/" target="_blank" style="border:none" title="海淘城">
+                    <img src='http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/20150122213808jhff0.jpg'/>
+                </a>
+                
+                <a id="Transrush4PX4" href="http://www.jiemai.com/" target="_blank" style="border:none" title="借卖网">
+                    <img src='http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/20150122213844zhg50.jpg'/>
+                </a>
+                
+                <a id="Transrush4PX5" href="http://www.mazentop.com/" target="_blank" style="border:none" title="美赞拓">
+                    <img src='http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/20150122214200z9jh0.jpg'/>
+                </a>
+                
+                <a id="Transrush4PX6" href="http://www.merchantrun.com/MerchantRun/" target="_blank" style="border:none" title="美胜商">
+                    <img src='http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/201501222142564y6r0.jpg'/>
+                </a>
+                
+            </dd>
+        </dl>
+    </div> -->
+    <div class="footer-link">
+        <div class="wrap clearfix">
+            <dl class="link-about-us">
+                <dt><strong style="float: left;">转运四方</strong> <span style="margin-left: 10px; display: block;
+                    float: left; margin-top: 2px;"><a target="_blank" rel="nofollow" href="http://weibo.com/tr4px"
+                        style="margin-right: 10px;">
+                        <img src="http://img.transrush.com/images/v2.0/c/sina_icon.png" style="border: none;"></a><a
+                            target="_blank" rel="nofollow" href="http://t.qq.com/love4px"><img src="http://img.transrush.com/images/v2.0/c/tenx_icon.png"
+                                style="border: none"></a></span></dt>
+                <dd class="clearfix">
+                    <p>
+                        <a href="/Info/About.aspx" target="_blank" id="TransrushIntroduction">公司介绍</a> <span
+                            class="line">|</span> <a href="/Info/PageOne.aspx?ID=2" target="_blank" id="TransrushContact">
+                                联系我们</a>
+                        
+                        <span class="line">|</span> <a href="/recruit/JobInfo.aspx?p=1" rel="nofollow" target="_blank"
+                            id="TransrushJoin">加入我们</a>
+                        
+                        <br>
+                    </p>
+                    <div class="tel-box ie6png">
+                        <span class="icons"></span><span class="tel" style="display: inline-block; padding-top: 10px;">0755-23713652</span>
+                        <!--<br>
+                        <a class="email" href="mailto:tr@4px.com">tr@4px.com</a>-->
+                    </div>
+                </dd>
+            </dl>
+            <dl class="link-partners">
+                <dt><strong>合作伙伴</strong></dt>
+                <dd class="clearfix">
+                    
+                            <a id="TransrushPartner1" href="http://www.singpost.com/"
+                                target="_blank" style="border: none" title="新加坡邮政" rel="nofollow">
+                                <img id="Footer_rptParter_ctl00_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/20150122210741nx2r0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner2" href="http://www.amazon.com/"
+                                target="_blank" style="border: none" title="亚马逊" rel="nofollow">
+                                <img id="Footer_rptParter_ctl01_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/20150122210728011c0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner3" href="http://www.ebay.com/"
+                                target="_blank" style="border: none" title="eBay" rel="nofollow">
+                                <img id="Footer_rptParter_ctl02_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/20150122210830wvrj0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner4" href="http://www.tmall.com/"
+                                target="_blank" style="border: none" title="天猫" rel="nofollow">
+                                <img id="Footer_rptParter_ctl03_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/02/27/20150227165430blta0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner5" href="http://www.taobao.com/"
+                                target="_blank" style="border: none" title="淘宝网" rel="nofollow">
+                                <img id="Footer_rptParter_ctl04_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/02/27/20150227163707gkl10.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner6" href="http://www.0573cn.cn/"
+                                target="_blank" style="border: none" title="菜鸟" rel="nofollow">
+                                <img id="Footer_rptParter_ctl05_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/02/27/2015022716365527bk0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner7" href="https://www.alipay.com/"
+                                target="_blank" style="border: none" title="支付宝" rel="nofollow">
+                                <img id="Footer_rptParter_ctl06_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/20150122210642gyzz0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner8" href="https://www.99bill.com/"
+                                target="_blank" style="border: none" title="快钱" rel="nofollow">
+                                <img id="Footer_rptParter_ctl07_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/201501222108113xxb0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner9" href="https://www.paypal.com/home"
+                                target="_blank" style="border: none" title="PayPal" rel="nofollow">
+                                <img id="Footer_rptParter_ctl08_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/201501222108209cnz0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner10" href="http://www.tenpay.com/"
+                                target="_blank" style="border: none" title="财付通" rel="nofollow">
+                                <img id="Footer_rptParter_ctl09_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/01/22/20150122210802ncgx0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner11" href="http://www.boc.cn/"
+                                target="_blank" style="border: none" title="中国银行" rel="nofollow">
+                                <img id="Footer_rptParter_ctl10_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/02/27/20150227163645gqjm0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner12" href="http://usa.visa.com/index.jsp"
+                                target="_blank" style="border: none" title="visa" rel="nofollow">
+                                <img id="Footer_rptParter_ctl11_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/02/27/20150227163632f2mt0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                            <a id="TransrushPartner13" href="http://www.mastercard.com/inde"
+                                target="_blank" style="border: none" title="万事达" rel="nofollow">
+                                <img id="Footer_rptParter_ctl12_imgLogo" src="http://imgs.transrush.com//File/Images/SiteLogo/2015/02/27/201502271636223ave0.jpg" style="border-style:None;border-width:0px;" />
+                            </a>
+                        
+                </dd>
+            </dl>
+            <dl class="link-friend">
+                <dt><strong>友情链接</strong></dt>
+                <dd class="clearfix">
+                    
+                            <a id="TransrushLink1" href="http://www.haitaocheng.com/"
+                                target="_blank" rel='nofollow'
+                                title="海淘城">
+                                海淘城</a>
+                        
+                            <a id="TransrushLink2" href="http://www.transrush.com/info/news.aspx?current=1"
+                                target="_blank" rel='nofollow'
+                                title="海淘资讯">
+                                海淘资讯</a>
+                        
+                            <a id="TransrushLink3" href="http://dwz.cn/NVFjc"
+                                target="_blank" rel='nofollow'
+                                title="一淘网">
+                                一淘网</a>
+                        
+                            <a id="TransrushLink4" href="http://www.meidebi.com/"
+                                target="_blank" 
+                                title="没得比">
+                                没得比</a>
+                        
+                            <a id="TransrushLink5" href="http://dwz.cn/1EPgDX"
+                                target="_blank" rel='nofollow'
+                                title="转运四方">
+                                转运四方</a>
+                        
+                            <a id="TransrushLink6" href="http://blog.sina.com.cn/tr4px"
+                                target="_blank" rel='nofollow'
+                                title="海淘博客">
+                                海淘博客</a>
+                        
+                            <a id="TransrushLink7" href="http://www.123haitao.com/"
+                                target="_blank" rel='nofollow'
+                                title="极客海淘">
+                                极客海淘</a>
+                        
+                            <a id="TransrushLink8" href="http://www.haitaobei.com/"
+                                target="_blank" rel='nofollow'
+                                title="海淘贝">
+                                海淘贝</a>
+                        
+                            <a id="TransrushLink9" href="http://www.haitaomama.cn/"
+                                target="_blank" rel='nofollow'
+                                title="海淘妈妈">
+                                海淘妈妈</a>
+                        
+                            <a id="TransrushLink10" href="http://www.walatao.com/"
+                                target="_blank" rel='nofollow'
+                                title="瓦拉淘">
+                                瓦拉淘</a>
+                        
+                            <a id="TransrushLink11" href="http://www.zbzdm.com/"
+                                target="_blank" rel='nofollow'
+                                title="值不值得买">
+                                值不值得买</a>
+                        
+                            <a id="TransrushLink12" href="http://www.haitaozy.com/haitaogongluedaquan/"
+                                target="_blank" rel='nofollow'
+                                title="海淘教程">
+                                海淘教程</a>
+                        
+                            <a id="TransrushLink13" href="http://www.mgpyh.com/"
+                                target="_blank" rel='nofollow'
+                                title="买个便宜货">
+                                买个便宜货</a>
+                        
+                            <a id="TransrushLink14" href="http://www.ebuybible.com/"
+                                target="_blank" rel='nofollow'
+                                title="海淘宝典">
+                                海淘宝典</a>
+                        
+                            <a id="TransrushLink15" href="http://www.yifen.com/"
+                                target="_blank" rel='nofollow'
+                                title="一分网">
+                                一分网</a>
+                        
+                            <a id="TransrushLink16" href="http://www.nlzpy.com/"
+                                target="_blank" rel='nofollow'
+                                title="哪里最便宜">
+                                哪里最便宜</a>
+                        
+                            <a id="TransrushLink17" href="http://www.ehtao.net"
+                                target="_blank" rel='nofollow'
+                                title="海淘助手">
+                                海淘助手</a>
+                        
+                            <a id="TransrushLink18" href="http://www.91lai.com"
+                                target="_blank" 
+                                title="海淘">
+                                海淘</a>
+                        
+                            <a id="TransrushLink19" href="http://haitao.extrabux.com/"
+                                target="_blank" rel='nofollow'
+                                title="Extrabux">
+                                Extrabux</a>
+                        
+                            <a id="TransrushLink20" href="http://www.herebbs.com"
+                                target="_blank" 
+                                title="海菠萝网">
+                                海菠萝网</a>
+                        
+                            <a id="TransrushLink21" href="http://www.qluu.com/"
+                                target="_blank" rel='nofollow'
+                                title="悠悠海淘">
+                                悠悠海淘</a>
+                        
+                            <a id="TransrushLink22" href="http://www.maishoudang.com/"
+                                target="_blank" rel='nofollow'
+                                title="买手党">
+                                买手党</a>
+                        
+                            <a id="TransrushLink23" href="http://www.baicaio.com/"
+                                target="_blank" rel='nofollow'
+                                title="白菜哦">
+                                白菜哦</a>
+                        
+                            <a id="TransrushLink24" href="http://www.haitaozj.com"
+                                target="_blank" rel='nofollow'
+                                title="海淘之家">
+                                海淘之家</a>
+                        
+                            <a id="TransrushLink25" href="http://www.haitaolab.com/"
+                                target="_blank" 
+                                title="海淘实验室">
+                                海淘实验室</a>
+                        
+                </dd>
+            </dl>
+        </div>
+        <div class="copyright">
+            <p>
+                Copyright 2015 © <a href="http://www.transrush.com/" target="_blank">www.transrush.com</a>
+                All rights reserved <a href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action"
+                    target="_blank" id="TransrushWebsiterecord">粤ICP备14069396号-1</a></p>
+            <p>
+                <a href="/Info/NewsDetails.aspx?ID=178" target="_blank" id="TransrushRegistration">注册协议</a><span
+                    class="line">｜</span><a href="/Info/NewsDetails.aspx?ID=121" target="_blank" id="TransrushPrivacy">隐私声明</a></p>
+        </div>
+    </div>
+</div>
+<!-- 底部 End -->
+    </form>
+    <script>
+        require(['jquery', 'my-transfer', 'search'], function ($) {
+            $('#txtSearchText').keydown(function (event) {
+                if (event.which == 13) {
+                    $('#FindPackage span').click();
+                    event.preventDefault();
+                }
+            });
+            $('#txtVefycode').keydown(function (event) {
+                if (event.which == 13) {
+                    $('#FindPackage span').click();
+                    event.preventDefault();
+                }
+            });
+            function HideDiv(divID) {
+                $("#" + divID).hide();
+            }
+
+            function GetTraceJsDomestic(thisobj, logisticsID, shortCode, deliveryCode) {
+                var url = "http://www.kuaidi100.com/chaxun?com=" + shortCode + "&nu=" + deliveryCode;
+                window.open(url);
+            }
+            //判断是否隐藏二维码
+            $(function () {
+                var code = "412311620136";
+                HideDiv("divQRCodes");
+                HideDiv("divQRCodes1");
+                HideDiv("divHTCodes");
+                $("#hidOROpen_icon").click(function () {
+                    if ($(this).attr("class") == "open_icon") {
+                        $("#divQRCodes").css("display", "");
+                        $("#divQRCodes1").css("display", "");
+                        $(this).attr("class", "hide_icon");
+                    } else {
+                        $("#divQRCodes").css("display", "none");
+                        $("#divQRCodes1").css("display", "none");
+                        $(this).attr("class", "open_icon");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

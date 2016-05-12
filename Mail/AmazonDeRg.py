@@ -1,0 +1,181 @@
+# coding=utf-8
+import re
+import urllib,urllib2,httplib,cookielib,os,sys,time
+import sys
+import mechanize
+import cookielib
+import sys, bs4
+sys.modules['BeautifulSoup'] = bs4
+from lxml.html.soupparser import fromstring
+
+
+def get_page(opener,url,data={}):
+    headers = {'Connection': 'keep-alive',
+        'Adf-Ads-Page-Id': '2',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+        'Adf-Rich-Message': 'true',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Accept-Encoding': 'gzip, deflate'
+        }
+
+    headers = {'User-Agent': "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; "
+            + ".NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; "
+            + "InfoPath.2; .NET4.0E)"}
+    #print data;
+    postdata=urllib.urlencode(data)
+    if postdata:
+	print(postdata)
+        request=urllib2.Request(url,postdata,headers=headers)
+    else:
+        request=urllib2.Request(url,headers=headers)
+    f = opener.open(request)
+    content = f.read()
+    #log(content,url);
+    return content
+
+def get_page1(opener,url,data):
+    headers = {'Connection': 'keep-alive',
+        'Adf-Ads-Page-Id': '2',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+        'Adf-Rich-Message': 'true',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Accept-Encoding': 'gzip, deflate'
+        }
+
+    headers = {'User-Agent': "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; "
+            + ".NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; "
+            + "InfoPath.2; .NET4.0E)"}
+    if data:
+	print(data)
+        request=urllib2.Request(url,data,headers=headers)
+    else:
+        request=urllib2.Request(url,headers=headers)
+    f = opener.open(request)
+    content = f.read()
+    #log(content,url);
+    return content
+br = mechanize.Browser()
+cj = cookielib.LWPCookieJar()
+br.set_cookiejar(cj)
+
+
+br.set_handle_equiv(True) 
+br.set_handle_gzip(True) 
+br.set_handle_redirect(True) 
+br.set_handle_referer(True) 
+br.set_handle_robots(False) 
+
+email = sys.argv[1]
+
+#br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
+#br.set_debug_http(True) 
+#br.set_debug_redirects(True) 
+#br.set_debug_responses(True)
+
+
+br.addheaders = [("User-agent", "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.13) Gecko/20101206 Ubuntu/10.10 (maverick) Firefox/3.6.13")]  
+sign_in = br.open('https://www.amazon.de/ap/register?openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.de%2Fgp%2Fcss%2Fhomepage.html%3Fie%3DUTF8%26*Version*%3D1%26*entries*%3D0&prevRID=K8K3VJP8QQ56YQM8VQBQ&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=deflex&openid.mode=checkid_setup&openid.ns.pape=http%3A%2F%2Fspecs.openid.net%2Fextensions%2Fpape%2F1.0&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&pageId=deflex&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0')
+
+br.select_form(name="register")  
+br["customerName"] = 'ghostbaby'
+br["email"] = email 
+br["password"] = 'jjkcs123'
+br["passwordCheck"] = 'jjkcs123'
+logged_in = br.submit() 
+
+#orders_html = br.open("https://www.amazon.de/gp/css/history/orders/view.html?orderFilter=year-%s&startAtIndex=1000")
+#print br.response().read()
+
+sign_in = br.open('https://www.amazon.de/gp/sign-in.html')  
+
+br.select_form(name="signIn")  
+br["email"] = email 
+br["password"] = 'jjkcs123'
+logged_in = br.submit() 
+
+one_click = br.open("https://www.amazon.de/gp/css/account/address/view.html?ie=UTF8&ref_=myab_view_new_address_form&viewID=newAddress")
+
+br.select_form(nr=1)
+br["enterAddressFullName"] = 'Ghostbaby G173000 PAKETDIENST'
+br["enterAddressAddressLine1"] = ''
+br["enterAddressAddressLine2"] = 'Rauental 24'
+br["enterAddressCity"] = 'Wuppertal'
+br["enterAddressStateOrRegion"] = 'Nordrhein-Westfalen'
+br["enterAddressPostalCode"] = '42289'
+br.find_control(name="enterAddressCountryCode", kind="list").value = ['DE']
+br["enterAddressPhoneNumber"] = '004920231955673'
+one_clickcheck = br.submit()
+
+cj1=urllib2.HTTPCookieProcessor(cj)
+opener=urllib2.build_opener(cj1)
+
+url = 'https://www.amazon.de/gp/css/account/cards/view.html/ref=add_pay_meth?ie=UTF8&viewID=addCard'
+
+url1 = get_page(opener,url)
+
+
+local2 = open('tmp.xml', 'w')
+local2.write(url1)
+local2.close()
+
+
+t = 'amazon.sh'
+m = 'session'
+cmd = "./%s %s" % (t,m)
+session = os.popen(cmd).read()
+session = session.strip('\n')
+
+t = 'amazon.sh'
+m = 'address'
+cmd = "./%s %s" % (t,m)
+address = os.popen(cmd).read()
+address = address.strip('\n')
+addressX = ""+address+".x"
+addressY = ""+address+".y"
+print(addressX)
+print(addressY)
+
+t = 'amazon.sh'
+m = 'id'
+cmd = "./%s %s" % (t,m)
+id = os.popen(cmd).read()
+id = id.strip('\n')
+print(id)
+
+filename = 'tmp.xml'
+os.remove(filename)
+
+
+values = '__mk_de_DE=%C5M%C5%B4%D5%D1&sessionId='+ session +'&action=add&paymentMethod=CARD&__mk_de_DE=%C5M%C5%B4%D5%D1&creditCardIssuer=V0&addCreditCardNumber=4693803267957380&card-name=CHENTAIZHONG&newCreditCardMonth=01&newCreditCardYear=2021&'+ addressX +'=77&'+ addressY +'=12&enterAddressFullName=&enterAddressAddressLine1=&enterAddressAddressLine2=&enterAddressCity=&enterAddressStateOrRegion=&enterAddressPostalCode=&enterAddressCountryCode=DE&enterAddressPhoneNumber=&enterAddressIsDomestic=0'
+
+url1 = 'https://www.amazon.de/gp/css/account/cards/view.html'
+
+price = get_page1(opener,url,values)
+
+edit = 'https://www.amazon.de/gp/css/account/address/view.html?ie=UTF8&viewID=editPaymentMethod'
+editvalue = '__mk_de_DE=%C5M%C5%B4%D5%D1&addressID='+ id +'&sessionId='+ session +'&ref_=myab_view_edit_payment_form&editPaymentMethod=%C4ndern'
+
+editdata = get_page1(opener,edit,editvalue)
+local = open('tmp2.html', 'w')
+local.write(editdata)
+local.close()
+
+
+t = 'amazon.sh'
+m = 'payment'
+cmd = "./%s %s" % (t,m)
+payment = os.popen(cmd).read()
+payment = payment.strip('\n')
+
+addpayment = '__mk_de_DE=%C5M%C5%B4%D5%D1&addressID='+ id +'&sessionId='+ session +'&dropdown-name=Ghostbaby+G173000-+Wuppertal&action=editPaymentMethodAction&paymentMethod='+ payment +'&originalCreditCardMonth.'+ payment +'=01&originalCreditCardYear.'+ payment +'=2021&creditCardMonth.'+ payment +'=01&creditCardYear.'+ payment +'=2021&editPaymentMethod=Continue'
+paymenturl = 'https://www.amazon.de/gp/css/account/address/view.html?ie=UTF8&viewID=editPaymentMethod'
+
+price = get_page1(opener,paymenturl,addpayment)
+
+
+turnonurl = 'https://www.amazon.de/gp/css/account/address/view.html'
+
+turnonValues = '__mk_de_DE=%C5M%C5%B4%D5%D1&oneClick=on&sessionId='+ session +'&ref_=myab_1_click_on'
+
+price = get_page1(opener,turnonurl,turnonValues)
+

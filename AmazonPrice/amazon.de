@@ -9,6 +9,8 @@ import urllib,urllib2,httplib,cookielib,os,sys
 from bs4 import BeautifulSoup
 import lxml.html
 import socket, traceback
+import random
+import linecache  
 
 def udp_send(ID):
 	host = '' # Bind to all interfaces
@@ -35,27 +37,18 @@ def udp_send(ID):
 
 
 def get_page(opener,url,data={}):
-    headers = {'Connection': 'keep-alive',
-        'Adf-Ads-Page-Id': '2',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
-        'Adf-Rich-Message': 'true',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Accept-Encoding': 'gzip, deflate'
-        }
-
-    headers = {'User-Agent': "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; "
-            + ".NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; "
-            + "InfoPath.2; .NET4.0E)"}
-    #print data;
-    postdata=urllib.urlencode(data)
-    if postdata:
-        request=urllib2.Request(url,postdata,headers=headers)
-    else:
-        request=urllib2.Request(url,headers=headers)
-    f = opener.open(request)
-    content = f.read()
-    #log(content,url);
-    return content
+	a = random.randrange(1, 9173)
+	ua = linecache.getline(r'ua_list.txt', a)
+	headers = {'User-Agent': ua} 
+	postdata=urllib.urlencode(data)
+	if postdata:
+		request=urllib2.Request(url,postdata,headers=headers)
+	else:
+		request=urllib2.Request(url,headers=headers)
+		f = opener.open(request)
+		content = f.read()
+		#log(content,url);
+		return content
 
 def write(info):
 	f=file("hello.txt","a+")
@@ -64,7 +57,13 @@ def write(info):
 	
 
 ASIN = sys.argv[3]
-URLS = ['http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF','http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF'] 
+URLS = ['http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
+	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
+	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
+	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
+	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
+	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
+	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF'] 
 num = 1
 def load_url(url, timeout, ASIN):
 	XPATH_SELECTOR = '//span[@id="priceblock_ourprice"]'
@@ -92,7 +91,7 @@ def load_url(url, timeout, ASIN):
 	else:
 		print datetime.datetime.now(),ASIN,"NOTHING"
 while True: 
-	with futures.ThreadPoolExecutor(max_workers=1) as executor:
+	with futures.ThreadPoolExecutor(max_workers=10) as executor:
 	    num += 1
 	    future_to_url = dict((executor.submit(load_url, url, 60, ASIN), url)
 				 for url in URLS)

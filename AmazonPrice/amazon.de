@@ -11,6 +11,7 @@ import lxml.html
 import socket, traceback
 import random
 import linecache  
+import base64
 
 def udp_send(ID):
 	host = '' # Bind to all interfaces
@@ -21,6 +22,8 @@ def udp_send(ID):
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 	s.bind((host, port))
 	ip = sys.argv[1]
+	ID1 = base64.b64encode(ID)
+	print ID1
 	port = int(sys.argv[2])
 	for i in range(1,2):
 		try:
@@ -28,7 +31,7 @@ def udp_send(ID):
 			#message, address = s.recvfrom(1234)
 			#print "Got data from", address,":",message
 			#s.sendto(ID, ('23.234.223.143', 19121)) 
-			s.sendto(ID, (ip, port))
+			s.sendto(ID1, (ip, port))
 		except (KeyboardInterrupt, SystemExit):
 			raise
 		except:
@@ -58,12 +61,7 @@ def write(info):
 
 ASIN = sys.argv[3]
 URLS = ['http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
-	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
-	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
-	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
-	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
-	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
-	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF'] 
+	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF']
 num = 1
 def load_url(url, timeout, ASIN):
 	XPATH_SELECTOR = '//span[@id="priceblock_ourprice"]'
@@ -77,6 +75,7 @@ def load_url(url, timeout, ASIN):
 		price1 = float(tree.xpath(XPATH_SELECTOR)[0].text[3:].replace(',','.'))
 		print datetime.datetime.now(),ASIN,price1
 		amdate = datetime.datetime.now()
+		print num
 		info = str(amdate) +"	"+ str(price1) +"	"+ ASIN +"\n"
 		if (price1 < 40):
 			if (num > 20):
@@ -91,7 +90,7 @@ def load_url(url, timeout, ASIN):
 	else:
 		print datetime.datetime.now(),ASIN,"NOTHING"
 while True: 
-	with futures.ThreadPoolExecutor(max_workers=10) as executor:
+	with futures.ThreadPoolExecutor(max_workers=3) as executor:
 	    num += 1
 	    future_to_url = dict((executor.submit(load_url, url, 60, ASIN), url)
 				 for url in URLS)

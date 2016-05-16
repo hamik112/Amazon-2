@@ -177,9 +177,9 @@ paymenturl = 'https://www.amazon.co.jp/gp/css/account/address/view.html?ie=UTF8&
 price = get_page1(opener,paymenturl,addpayment)
 
 
-#turnonurl = 'https://www.amazon.jp/gp/css/account/address/view.html'
+turnonurl = 'https://www.amazon.jp/gp/css/account/address/view.html'
 
-#turnonValues = '__mk_de_DE=%C5M%C5%B4%D5%D1&oneClick=on&sessionId='+ session +'&ref_=myab_1_click_on'
+turnonValues = '__mk_de_DE=%C5M%C5%B4%D5%D1&oneClick=on&sessionId='+ session +'&ref_=myab_1_click_on'
 
-#price = get_page1(opener,turnonurl,turnonValues)
+price = get_page1(opener,turnonurl,turnonValues)
 

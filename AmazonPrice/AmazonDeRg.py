@@ -8,6 +8,9 @@ import sys, bs4
 sys.modules['BeautifulSoup'] = bs4
 from lxml.html.soupparser import fromstring
 
+def print_cookie(ck):
+    for value in ck:
+        print value ,"\n";
 
 def get_page(opener,url,data={}):
     headers = {'Connection': 'keep-alive',
@@ -74,8 +77,9 @@ email = sys.argv[1]
 #br.set_debug_responses(True)
 #
 
-br.addheaders = [("User-agent", "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.13) Gecko/20101206 Ubuntu/10.10 (maverick) Firefox/3.6.13")]  
+br.addheaders = [("User-agent", "Fiddler")]
 sign_in = br.open('https://www.amazon.de/ap/register?openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.de%2Fgp%2Fcss%2Fhomepage.html%3Fie%3DUTF8%26*Version*%3D1%26*entries*%3D0&prevRID=K8K3VJP8QQ56YQM8VQBQ&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=deflex&openid.mode=checkid_setup&openid.ns.pape=http%3A%2F%2Fspecs.openid.net%2Fextensions%2Fpape%2F1.0&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&pageId=deflex&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0')
+print_cookie(cj)
 
 br.select_form(name="register")  
 br["customerName"] = 'ghostbaby'
@@ -83,9 +87,11 @@ br["email"] = email
 br["password"] = 'jjkcs123'
 br["passwordCheck"] = 'jjkcs123'
 logged_in = br.submit() 
+
+print br.response().read()
 #
 ##orders_html = br.open("https://www.amazon.de/gp/css/history/orders/view.html?orderFilter=year-%s&startAtIndex=1000")
-print br.response().read()
+#print br.response().read()
 
 #sign_in = br.open('https://www.amazon.de/gp/sign-in.html')  
 #

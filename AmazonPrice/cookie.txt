@@ -1,0 +1,9 @@
+# Netscape HTTP Cookie File
+# http://www.netscape.com/newsref/std/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+.amazon.de	TRUE	/	FALSE	2082754801	session-id	277-8999870-5868765
+.amazon.de	TRUE	/	FALSE	2082754801	session-id-time	2082754801l
+.amazon.de	TRUE	/	FALSE	2082754801	x-wl-uid	1TPT7vo7lmVV1KkQs47nlhQbcaXqNdhQ7C8qGc8B8CcY1vnh1gXUnHSxH1Z9KqLzAfhwTcpZQn58=
+www.amazon.de	FALSE	/	FALSE	1495641824	x-amz-captcha-1	1464113024936216
+www.amazon.de	FALSE	/	FALSE	1495641824	x-amz-captcha-2	p6g7BBV3gFwzVswy7033gQ==

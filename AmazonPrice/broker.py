@@ -1,9 +1,43 @@
 #!/usr/bin/env python
 #this is the udp broadcast client
-import socket, traceback ,base64
+import socket, traceback ,base64, logging
 import os,sys,string,psutil,re,time,datetime,json
 from xml.dom.minidom import parse, parseString
+from pyDes import *
+import threading
 
+logging.basicConfig(level=logging.DEBUG,
+	format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+	datefmt='%a, %d %b %Y %H:%M:%S',
+	filename='myapp.log',
+	filemode='w')
+
+def Login(serverip,serverport,s):
+	loginjson = '{"cmd":"login","ip":"133.130.106.179","bindport":"9683","monitornum":"0"}'
+	des_json = DesEncrypt(loginjson)
+	s.sendto(des_json,(serverip,serverport))
+
+def asinsearch(processName):
+	pids = psutil.pids()
+        a = 1
+        for pid in pids:
+                p = psutil.Process(pid)
+                if p.name() == processName:
+                        a = list(p.cmdline())
+                        if a[1] == "amazon.de":
+				print a[2]
+				return a[2]
+def asinnum(processName):
+	pids = psutil.pids()
+        a = 1
+	num = 0
+        for pid in pids:
+                p = psutil.Process(pid)
+                if p.name() == processName:
+                        a = list(p.cmdline())
+                        if a[1] == "amazon.de":
+				num += 1
+				return num
 def processinfo(processName):
         pids = psutil.pids()
         a = 1
@@ -14,6 +48,15 @@ def processinfo(processName):
                         if a[1] == "amazon.de":
                                 print a[1],pid
 				p.kill()
+def DesEncrypt(str):
+        k = des(Des_Key, ECB, pad=None, padmode=PAD_PKCS5)
+        EncryptStr = k.encrypt(str)
+        return base64.b64encode(EncryptStr)
+
+def DesDecrypt(str):
+        k = des(Des_Key, ECB, pad=None, padmode=PAD_PKCS5)
+        DecryptStr = k.decrypt(base64.b64decode(str))
+        return DecryptStr
 
 def getText(nodelist):
 	rc = ""
@@ -34,40 +77,135 @@ for port in ports:
 	serverport = int(getText(port.childNodes))
 	print serverport 
 
+des_key = config_element.getElementsByTagName("Des_Key")
+for key in des_key:
+        Des_Key = bytes(getText(key.childNodes))
+        print Des_Key 
+
+
+des_iv = config_element.getElementsByTagName("Des_IV")
+for iv in des_iv:
+        Des_IV = bytes(getText(iv.childNodes))
+        print Des_IV
+
+def heartbeat(serverip,serverport,s):
+	while True:
+		print asinnum("python")
+		hbjson = '{"cmd":"heartbeat","monitornum":"0","ip":"133.130.106.179","bindport":"9683"}'
+		hb_json = DesEncrypt(hbjson)
+		s.sendto(hb_json,(serverip,serverport))
+		print hbjson 
+		time.sleep(10)
+
+def write(info,mode):
+        f=file("monIPlist.txt",mode)
+        f.write(info)
+	f.write('\n')
+        f.close()
+
+def acc(serverip,serverpot,s):		
+	while True:
+		try:
+			data,address=s.recvfrom(9683)
+			deCode = DesDecrypt(data) 
+			print deCode
+			cmdjson = json.loads(deCode)
+			cmd = cmdjson["cmd"]
+			if cmd == "CODESAPPEA":
+				processinfo("python")
+				repose = '{"cmd":"status_captcha","status":"F**K","ip":"133.130.106.179","bindport":"9683"}'
+				baserepose = DesEncrypt(repose)
+				print ""
+				print repose
+				s.sendto(baserepose,(serverip,serverport))
+			elif cmd == "start_mon":		
+				asin = cmdjson["asin"]
+				#ip = cmdjson["ip"]
+				#port = cmdjson["port"]
+				print cmd,asin
+				screen = 'screen'
+				arg = '-dmS'
+				title = 'Amazon' + asin
+				m = 'python'
+				t = 'amazon.de'
+				cmd = "%s %s %s %s %s %s" % (screen,arg,title,m,t,asin)
+				print cmd
+				os.popen(cmd)
+				time.sleep(2)
+				monasin = asinsearch("python")
+				repose = '{"cmd":"start_mon_return","status":"OK","ip":"133.130.106.179","bindport":"9683","asin":"'+ monasin +'"}'
+				print repose
+				monrepose = DesEncrypt(repose)
+				s.sendto(monrepose,(serverip,serverport))
+			elif cmd == "login_succ":
+				print("Login success....")
+			elif cmd == "updatepool":
+				mode = "w"
+				ipnum = len(cmdjson["ippool"])
+				for i in range(ipnum):
+					i += 1
+					ip = cmdjson["ippool"]["ip" + str(i)]
+					write(ip,mode)
+					mode = "a+"
+			else:
+				print("OK") 
+		except (KeyboardInterrupt, SystemExit):
+			raise
+		except:
+			traceback.print_exc()
+
 print "Amaozn DE Price broker Start listening..."
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
-data = "Data from pc"
 s.bind(("",9683))
-while True:
-	try:
-		data,address=s.recvfrom(9683)
-		deCode = base64.b64decode(data)
-		if deCode == "CODESAPPEA":
-			processinfo("python")
-			repose = '{"cmd":"stopedmon"}'
-			baserepose = base64.b64encode(data)
-			s.sendto(baserepose,(serverip,serverport))
-		else:		
-			print deCode
-			cmdjson = json.loads(deCode)
-			cmd = cmdjson["cmd"]
-			asin = cmdjson["asin"]
-			ip = cmdjson["ip"]
-			port = cmdjson["port"]
-			print cmd,asin
-			if cmd == "startmon":
-				screen = 'screen'
-				arg = '-dmS'
-				title = 'Amazon' + asin
-				m = 'python'
-				t = 'amazon.de'
-				cmd = "%s %s %s %s %s %s %s %s" % (screen,arg,title,m,t,ip,port,asin)
-				os.popen(cmd) 
-	except (KeyboardInterrupt, SystemExit):
-		raise
-	except:
-		traceback.print_exc()
+num = 0
+Login(serverip,serverport,s)
+threads = []
+t1 = threading.Thread(target=heartbeat,args=(serverip,serverport,s))
+threads.append(t1)
+t2 = threading.Thread(target=acc,args=(serverip,serverport,s))
+threads.append(t2)
+
+if __name__ == '__main__':
+	for t in threads:
+		t.setDaemon(True)
+		t.start()
+	t.join()
+#heartbeat(serverip,serverport,s)
+#acc(serverip,serverport,s)
+#while True:
+#	try:
+#		data,address=s.recvfrom(9683)
+#		deCode = DesDecrypt(data) 
+#		print deCode
+#		cmdjson = json.loads(deCode)
+#		cmd = cmdjson["cmd"]
+#		if cmd == "CODESAPPEA":
+#			processinfo("python")
+#			repose = '{"cmd":"stopedmon"}'
+#			baserepose = base64.b64encode(data)
+#			s.sendto(baserepose,(serverip,serverport))
+#		elif cmd == "start_mon":		
+#			asin = cmdjson["asin"]
+#			ip = cmdjson["ip"]
+#			port = cmdjson["port"]
+#			print cmd,asin
+#			screen = 'screen'
+#			arg = '-dmS'
+#			title = 'Amazon' + asin
+#			m = 'python'
+#			t = 'amazon.de'
+#			cmd = "%s %s %s %s %s %s %s %s" % (screen,arg,title,m,t,ip,port,asin)
+#			print cmd
+#			os.popen(cmd)
+#		elif cmd == "login_succ":
+#			print("Login success....")
+#		else:
+#			print("OK") 
+#	except (KeyboardInterrupt, SystemExit):
+#		raise
+#	except:
+#		traceback.print_exc()

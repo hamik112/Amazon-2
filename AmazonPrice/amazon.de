@@ -12,16 +12,60 @@ import socket, traceback
 import random
 import linecache  
 import base64
+from pyDes import *
+from xml.dom.minidom import parse, parseString
+from socket import *
+import re
+import json
 
-def udp_send(ID,IP,PORT):
+def DesEncrypt(str):
+        k = des(Des_Key, ECB, pad=None, padmode=PAD_PKCS5)
+        EncryptStr = k.encrypt(str)
+        return base64.b64encode(EncryptStr)
+
+def DesDecrypt(str):
+        k = des(Des_Key, ECB, pad=None, padmode=PAD_PKCS5)
+        DecryptStr = k.decrypt(base64.b64decode(str))
+        return DecryptStr
+
+def udp_send(ID):
 	host = '' # Bind to all interfaces
 	port = 1234
 	print "python UDP multi case server test"
-	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-	s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+	s = socket(AF_INET, SOCK_DGRAM)
+	s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+	s.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
 	s.bind((host, port))
-	ID1 = base64.b64encode(ID)
+	ID1 = DesEncrypt(ID)
+	print ID1
+	PORT = 19121
+	file = open("monIPlist.txt")
+ 
+	while 1:
+		lines = file.readlines(100000)
+		print lines
+		if not lines:
+			return	
+		for IP in lines:
+			for i in range(1,2):
+				try:
+					print IP
+					s.sendto(ID1,(IP, PORT))
+				except (KeyboardInterrupt, SystemExit):
+					raise
+				except:
+					traceback.print_exc()
+		return
+	
+def udp_send2(ID,IP,PORT):
+	host = '' # Bind to all interfaces
+	port = 1234
+	print "python UDP multi case server test"
+	s = socket(AF_INET, SOCK_DGRAM)
+	s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+	s.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+	s.bind((host, port))
+	ID1 = DesEncrypt(ID)
 	print ID1
 	for i in range(1,2):
 		try:
@@ -32,6 +76,28 @@ def udp_send(ID,IP,PORT):
 			traceback.print_exc()
 	return
 
+def tcp_send(list):
+	HOST = '103.236.223.152'
+	PORT = 9683
+	BUFSIZE = 1024
+	ADDR = (HOST,PORT)
+	tcpCliSock = socket(AF_INET, SOCK_STREAM)
+	tcpCliSock.connect(ADDR)
+	try:
+		data = '{"cmd":"resolve_captcha","url":"' + list +'"}'
+		des_data = DesEncrypt(data)
+		if not data:
+			return 
+		tcpCliSock.send(des_data)
+		data = tcpCliSock.recv(BUFSIZE)
+		if not data:
+			return
+		print 'Server: ', DesDecrypt(data)
+	except Exception,e:
+		print 'Error: ',e
+
+	return DesDecrypt(data)
+	tcpCliSock.close()
 
 def get_page(opener,url,data={}):
 	a = random.randrange(1, 9173)
@@ -51,35 +117,102 @@ def write(info):
 	f=file("hello.txt","a+")
 	f.write(info)
 	f.close()
-	
 
-ASIN = sys.argv[3]
-URLS = ['http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
-	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF']
+def getText(nodelist):
+        rc = ""
+        for node in nodelist:
+                if node.nodeType == node.TEXT_NODE:
+                        rc = rc + node.data
+        return rc	
+
+ASIN = sys.argv[1]
+URLS = ['http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF']
 num = 1
+
+pattern = '^[a-z]{6}$'
+regex = re.compile(pattern)
+
+dom1 = parse('broker.xml')
+config_element = dom1.getElementsByTagName("config")[0]
+des_key = config_element.getElementsByTagName("Des_Key")
+for key in des_key:
+        Des_Key = bytes(getText(key.childNodes))
+        print Des_Key
+
+
+des_iv = config_element.getElementsByTagName("Des_IV")
+for iv in des_iv:
+        Des_IV = bytes(getText(iv.childNodes))
+        print Des_IV
+
 def load_url(url, timeout, ASIN):
-	ip = sys.argv[1]
-	port = int(sys.argv[2])
+	#ip = sys.argv[1]
+	#port = int(sys.argv[2])
 	XPATH_SELECTOR = '//span[@id="priceblock_ourprice"]'
 	SLEEP_INTERVAL = 1
-	cookiejar=cookielib.CookieJar()
+	filename = 'cookie.txt'
+	cookiejar=cookielib.MozillaCookieJar(filename)
+	file = open(filename)
+	cookielines = file.readlines(100)
+	if cookielines:
+		cookiejar.load('cookie.txt', ignore_discard=True, ignore_expires=True)
+	else:
+		print("NULL COOKIE")	
 	cj=urllib2.HTTPCookieProcessor(cookiejar)
 	opener=urllib2.build_opener(cj)
 	price = get_page(opener,url)
+	tree = html.fromstring(price)
 	if "Bot Check" in price:
-		print "(～ o ～)~zZ: 验证码出现。。。。休息吧。。。。"
-		udp_send("CODESAPPEA","127.0.0.1",9683)
+		print "(～ o ～)~zZ: Sleep................"
+		IMG_SELECTOR = '//img'
+                imgsrc = tree.xpath(IMG_SELECTOR)
+                for href in imgsrc:
+                        list = href.attrib["src"]
+                        if "captcha" in list:
+				captcha_str = tcp_send(list)
+				captcha_json = json.loads(captcha_str)
+				captcha = captcha_json["captcha_str"]
+				re_result = regex.match(captcha)
+                                if re_result:
+					print captcha
+		AMZN_SELECTOR = '//input[@name="amzn"]'
+		inputsrc = tree.xpath(AMZN_SELECTOR)
+		for amzn in inputsrc:
+			amzn_list = amzn.attrib["value"]
+		amzn_url = 'http://www.amazon.de/errors/validateCaptcha?amzn=' + amzn_list + '&amzn-r=/dp/' + ASIN +'?m=A3JWKAKR8XB7XF&amzn-pt=Detail&field-keywords=' + captcha
+		price1 = get_page(opener,amzn_url)
+		tree1 = html.fromstring(price1)
+		cookiejar.save(ignore_discard=True, ignore_expires=True) 
+		if "priceblock_ourprice" in price1:
+                        price2 = float(tree1.xpath(XPATH_SELECTOR)[0].text[3:].replace(',','.'))
+                        print datetime.datetime.now(),ASIN,price2
+                        amdate = datetime.datetime.now()
+                        print num
+                        info = str(amdate) +"   "+ str(price2) +"       "+ ASIN +"\n"
+                        if (price2 < 40):
+                                if (num > 20):
+                                        udp_send(ASIN)
+                                        global num
+                                        num = 1
+                                        write(info)
+                                else:
+                                        return
+                        else:
+                                return
+                else:
+                        print datetime.datetime.now(),ASIN,"NOTHING"
+		#alarm = '{"cmd":"CODESAPPEA"}'
+		#udp_send2(alarm,"127.0.0.1",9683)
 	else:
 		if "priceblock_ourprice" in price:	
-			tree = html.fromstring(price)
 			price1 = float(tree.xpath(XPATH_SELECTOR)[0].text[3:].replace(',','.'))
 			print datetime.datetime.now(),ASIN,price1
 			amdate = datetime.datetime.now()
 			print num
 			info = str(amdate) +"	"+ str(price1) +"	"+ ASIN +"\n"
 			if (price1 < 40):
-				if (num > 5):
-					udp_send(ASIN,ip,port)
+				if (num > 20):
+					udp_send(ASIN)
 					global num
 					num = 1
 					write(info)
@@ -90,7 +223,7 @@ def load_url(url, timeout, ASIN):
 		else:
 			print datetime.datetime.now(),ASIN,"NOTHING"
 while True: 
-	with futures.ThreadPoolExecutor(max_workers=2) as executor:
+	with futures.ThreadPoolExecutor(max_workers=10) as executor:
 	    num += 1
 	    future_to_url = dict((executor.submit(load_url, url, 60, ASIN), url)
 				 for url in URLS)

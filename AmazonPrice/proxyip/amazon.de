@@ -1,0 +1,105 @@
+# coding=utf-8
+from concurrent import futures
+import urllib2
+import datetime
+import time
+import requests
+from lxml import html
+import urllib,urllib2,httplib,cookielib,os,sys
+from bs4 import BeautifulSoup
+import lxml.html
+import socket, traceback
+import random
+import linecache  
+import base64
+
+def udp_send(ID,IP,PORT):
+	host = '' # Bind to all interfaces
+	port = 1234
+	print "python UDP multi case server test"
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+	s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+	s.bind((host, port))
+	ID1 = base64.b64encode(ID)
+	print ID1
+	for i in range(1,2):
+		try:
+			s.sendto(ID1,(IP, PORT))
+		except (KeyboardInterrupt, SystemExit):
+			raise
+		except:
+			traceback.print_exc()
+	return
+
+
+def get_page(opener,url,data={}):
+	a = random.randrange(1, 9173)
+	ua = linecache.getline(r'ua_list.txt', a)
+	headers = {'User-Agent': ua} 
+	postdata=urllib.urlencode(data)
+	if postdata:
+		request=urllib2.Request(url,postdata,headers=headers)
+	else:
+		request=urllib2.Request(url,headers=headers)
+		f = opener.open(request)
+		content = f.read()
+		#log(content,url);
+		return content
+
+def write(info):
+	f=file("hello.txt","a+")
+	f.write(info)
+	f.close()
+	
+count = len(open("proxy.txt",'rU').readlines())
+ASIN = sys.argv[3]
+URLS = ['http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF',
+	'http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF']
+
+num = 1
+def load_url(url, timeout, ASIN):
+	ip = sys.argv[1]
+	port = int(sys.argv[2])
+	b = random.randrange(1, int(count))
+        proxyip = linecache.getline(r'proxy.txt', b)
+	protocol, proxy = proxyip.split('=')
+	XPATH_SELECTOR = '//span[@id="priceblock_ourprice"]'
+	SLEEP_INTERVAL = 1
+	cookiejar=cookielib.CookieJar()
+	cj=urllib2.HTTPCookieProcessor(cookiejar)
+	
+	proxy1 = {protocol:proxy}
+        proxy_support = urllib2.ProxyHandler(proxy1)
+        opener = urllib2.build_opener(proxy_support,cj)
+        urllib2.install_opener(opener)
+
+	price = get_page(opener,url)
+	if "Bot Check" in price:
+		print "(～ o ～)~zZ: 验证码出现。。。。休息吧。。。。"
+		udp_send("CODESAPPEA","127.0.0.1",9683)
+	else:
+		if "priceblock_ourprice" in price:	
+			tree = html.fromstring(price)
+			price1 = float(tree.xpath(XPATH_SELECTOR)[0].text[3:].replace(',','.'))
+			print datetime.datetime.now(),ASIN,price1
+			amdate = datetime.datetime.now()
+			print num
+			info = str(amdate) +"	"+ str(price1) +"	"+ ASIN +"\n"
+			if (price1 < 40):
+				if (num > 5):
+					udp_send(ASIN,ip,port)
+					global num
+					num = 1
+					write(info)
+				else:
+					return
+			else:
+				return	
+		else:
+			print datetime.datetime.now(),ASIN,"NOTHING"
+while True: 
+	with futures.ThreadPoolExecutor(max_workers=20) as executor:
+	    num += 1
+	    future_to_url = dict((executor.submit(load_url, url, 60, ASIN), url)
+				 for url in URLS)

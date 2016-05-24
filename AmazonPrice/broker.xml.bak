@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config>
+	<server>103.236.223.152</server>
+	<port>19730</port>
+	<pwd>pwd</pwd>
+	<Des_Key>UJNMBVGH</Des_Key>
+	<Des_IV>HJMHGHMB</Des_IV>
+</config>

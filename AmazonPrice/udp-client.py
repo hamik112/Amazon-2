@@ -3,7 +3,7 @@
 import socket, traceback
 
 
-port = 2345
+port = 9683 
 
 print "python UDP multi case client test"
 
@@ -17,7 +17,7 @@ while True:
     try:
         data,address=s.recvfrom(2345)
         print "cli get data form", address, ":", data
-        s.sendto("client ack", address)
+        #s.sendto("client ack", address)
 	#data,address = s.recvfrom(1024)
         #print "received %r from %r" % (data, address)
     except (KeyboardInterrupt, SystemExit):

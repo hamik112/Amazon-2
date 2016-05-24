@@ -15,16 +15,6 @@ ip = sys.argv[1]
 port = int(sys.argv[2])
 ADDR = (ip, port)
 print ip,port
-data = '{"cmd":"startmon","asin":"B007X2CL6E","ip":"133.130.106.179","port":2345}'
+data = '{"cmd":"startmon","asin":"B008V8YZMM","ip":"133.130.106.179","port":2345}'
 basedata = base64.b64encode(data)
-for i in range(1,100):
-    try:
-        s.sendto(basedata, ADDR)
-        message, address = s.recvfrom(1234)
-        print "Got data from", address,":",message 
-        # Acknowledge it.
-        s.sendto("I am here", address)
-    except (KeyboardInterrupt, SystemExit):
-        raise
-    except:
-        traceback.print_exc()
+s.sendto(basedata, ADDR)

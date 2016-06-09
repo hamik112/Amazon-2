@@ -82,6 +82,7 @@ def tcp_send(list):
 	BUFSIZE = 1024
 	ADDR = (HOST,PORT)
 	tcpCliSock = socket(AF_INET, SOCK_STREAM)
+	tcpCliSock.settimeout(5.0)
 	tcpCliSock.connect(ADDR)
 	try:
 		data = '{"cmd":"resolve_captcha","url":"' + list +'"}'
@@ -150,14 +151,15 @@ def load_url(url, timeout, ASIN):
 	#port = int(sys.argv[2])
 	XPATH_SELECTOR = '//span[@id="priceblock_ourprice"]'
 	SLEEP_INTERVAL = 1
-	filename = 'cookie.txt'
-	cookiejar=cookielib.MozillaCookieJar(filename)
-	file = open(filename)
-	cookielines = file.readlines(100)
-	if cookielines:
-		cookiejar.load('cookie.txt', ignore_discard=True, ignore_expires=True)
-	else:
-		print("NULL COOKIE")	
+	cookiejar=cookielib.MozillaCookieJar()
+	#filename = 'cookie.txt'
+	#cookiejar=cookielib.MozillaCookieJar(filename)
+	#file = open(filename)
+	#cookielines = file.readlines(100)
+	#if cookielines:
+	#	cookiejar.load('cookie.txt', ignore_discard=True, ignore_expires=True)
+	#else:
+	#	print("NULL COOKIE")	
 	cj=urllib2.HTTPCookieProcessor(cookiejar)
 	opener=urllib2.build_opener(cj)
 	price = get_page(opener,url)
@@ -182,7 +184,7 @@ def load_url(url, timeout, ASIN):
 		amzn_url = 'http://www.amazon.de/errors/validateCaptcha?amzn=' + amzn_list + '&amzn-r=/dp/' + ASIN +'?m=A3JWKAKR8XB7XF&amzn-pt=Detail&field-keywords=' + captcha
 		price1 = get_page(opener,amzn_url)
 		tree1 = html.fromstring(price1)
-		cookiejar.save(ignore_discard=True, ignore_expires=True) 
+	#	cookiejar.save(ignore_discard=True, ignore_expires=True) 
 		if "priceblock_ourprice" in price1:
                         price2 = float(tree1.xpath(XPATH_SELECTOR)[0].text[3:].replace(',','.'))
                         print datetime.datetime.now(),ASIN,price2

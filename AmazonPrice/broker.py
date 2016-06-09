@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-#this is the udp broadcast client
-import socket, traceback ,base64, logging
+import socket, traceback ,base64, logging, netifaces
 import os,sys,string,psutil,re,time,datetime,json
 from xml.dom.minidom import parse, parseString
 from pyDes import *
@@ -12,21 +11,25 @@ logging.basicConfig(level=logging.DEBUG,
 	filename='myapp.log',
 	filemode='w')
 
-def Login(serverip,serverport,s):
-	loginjson = '{"cmd":"login","ip":"133.130.106.179","bindport":"9683","monitornum":"0"}'
+def Login(serverip,serverport,localip,s):
+	loginjson = '{"cmd":"login","ip":"' + localip  + '","bindport":"9683","monitornum":"0"}'
+	print loginjson
 	des_json = DesEncrypt(loginjson)
 	s.sendto(des_json,(serverip,serverport))
 
 def asinsearch(processName):
 	pids = psutil.pids()
         a = 1
+	asinlist = []
         for pid in pids:
                 p = psutil.Process(pid)
                 if p.name() == processName:
                         a = list(p.cmdline())
                         if a[1] == "amazon.de":
 				print a[2]
-				return a[2]
+				asinlist.append(a[2])
+	return asinlist
+
 def asinnum(processName):
 	pids = psutil.pids()
         a = 1
@@ -37,7 +40,8 @@ def asinnum(processName):
                         a = list(p.cmdline())
                         if a[1] == "amazon.de":
 				num += 1
-				return num
+	return num
+
 def processinfo(processName):
         pids = psutil.pids()
         a = 1
@@ -48,6 +52,12 @@ def processinfo(processName):
                         if a[1] == "amazon.de":
                                 print a[1],pid
 				p.kill()
+def print_ifaces_data():
+        iface_data = netifaces.ifaddresses("eth0")
+        data = iface_data.get(netifaces.AF_INET)[0]
+        print data
+	return data.get("addr")
+
 def DesEncrypt(str):
         k = des(Des_Key, ECB, pad=None, padmode=PAD_PKCS5)
         EncryptStr = k.encrypt(str)
@@ -88,10 +98,12 @@ for iv in des_iv:
         Des_IV = bytes(getText(iv.childNodes))
         print Des_IV
 
-def heartbeat(serverip,serverport,s):
+def heartbeat(serverip,serverport,localip,s):
 	while True:
-		print asinnum("python")
-		hbjson = '{"cmd":"heartbeat","monitornum":"0","ip":"133.130.106.179","bindport":"9683"}'
+		if type(asinnum("python")) == int:
+			hbjson = '{"cmd":"heartbeat","monitornum":"' + str(asinnum("python")) + '","ip":"' + localip + '","bindport":"9683"}'
+		else:
+			hbjson = '{"cmd":"heartbeat","monitornum":"0","ip":"' + localip + '","bindport":"9683"}'
 		hb_json = DesEncrypt(hbjson)
 		s.sendto(hb_json,(serverip,serverport))
 		print hbjson 
@@ -103,7 +115,7 @@ def write(info,mode):
 	f.write('\n')
         f.close()
 
-def acc(serverip,serverpot,s):		
+def acc(serverip,serverpot,localip,s):		
 	while True:
 		try:
 			data,address=s.recvfrom(9683)
@@ -113,7 +125,7 @@ def acc(serverip,serverpot,s):
 			cmd = cmdjson["cmd"]
 			if cmd == "CODESAPPEA":
 				processinfo("python")
-				repose = '{"cmd":"status_captcha","status":"F**K","ip":"133.130.106.179","bindport":"9683"}'
+				repose = '{"cmd":"status_captcha","status":"F**K","ip":"' + localip + '","bindport":"9683"}'
 				baserepose = DesEncrypt(repose)
 				print ""
 				print repose
@@ -133,7 +145,8 @@ def acc(serverip,serverpot,s):
 				os.popen(cmd)
 				time.sleep(2)
 				monasin = asinsearch("python")
-				repose = '{"cmd":"start_mon_return","status":"OK","ip":"133.130.106.179","bindport":"9683","asin":"'+ monasin +'"}'
+				monasinStr = ";".join(monasin)
+				repose = '{"cmd":"start_mon_return","status":"OK","ip":"' + localip + '","bindport":"9683","asin":"'+ monasinStr +'"}'
 				print repose
 				monrepose = DesEncrypt(repose)
 				s.sendto(monrepose,(serverip,serverport))
@@ -161,12 +174,13 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
 s.bind(("",9683))
+ip = print_ifaces_data()
 num = 0
-Login(serverip,serverport,s)
+Login(serverip,serverport,ip,s)
 threads = []
-t1 = threading.Thread(target=heartbeat,args=(serverip,serverport,s))
+t1 = threading.Thread(target=heartbeat,args=(serverip,serverport,ip,s))
 threads.append(t1)
-t2 = threading.Thread(target=acc,args=(serverip,serverport,s))
+t2 = threading.Thread(target=acc,args=(serverip,serverport,ip,s))
 threads.append(t2)
 
 if __name__ == '__main__':

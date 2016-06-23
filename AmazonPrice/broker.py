@@ -4,6 +4,7 @@ import os,sys,string,psutil,re,time,datetime,json
 from xml.dom.minidom import parse, parseString
 from pyDes import *
 import threading
+import urllib
 
 logging.basicConfig(level=logging.DEBUG,
 	format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -17,30 +18,37 @@ def Login(serverip,serverport,localip,s):
 	des_json = DesEncrypt(loginjson)
 	s.sendto(des_json,(serverip,serverport))
 
-def asinsearch(processName):
-	pids = psutil.pids()
-        a = 1
-	asinlist = []
-        for pid in pids:
-                p = psutil.Process(pid)
-                if p.name() == processName:
-                        a = list(p.cmdline())
-                        if a[1] == "amazon.de":
-				print a[2]
-				asinlist.append(a[2])
-	return asinlist
+def monasin(arg,arg2):
+	t = 'amazon.sh'
+	cmd = "./%s %s %s" % (t,arg,arg2)
+	session = os.popen(cmd).read()
+	session = session.strip('\n')
+	return session
 
-def asinnum(processName):
-	pids = psutil.pids()
-        a = 1
-	num = 0
-        for pid in pids:
-                p = psutil.Process(pid)
-                if p.name() == processName:
-                        a = list(p.cmdline())
-                        if a[1] == "amazon.de":
-				num += 1
-	return num
+#def asinsearch(processName):
+#	pids = psutil.pids()
+#        a = 1
+#	asinlist = []
+#        for pid in pids:
+#                p = psutil.Process(pid)
+#                if p.name() == processName:
+#                        a = list(p.cmdline())
+#                        if a[1] == "amazon.de":
+#				print a[2]
+#				asinlist.append(a[2])
+#	return asinlist
+#
+#def asinnum(processName):
+#	pids = psutil.pids()
+#        a = 1
+#	num = 0
+#        for pid in pids:
+#                p = psutil.Process(pid)
+#                if p.name() == processName:
+#                        a = list(p.cmdline())
+#                        if a[1] == "amazon.de":
+#				num += 1
+#	return num
 
 def processinfo(processName):
         pids = psutil.pids()
@@ -100,14 +108,26 @@ for iv in des_iv:
 
 def heartbeat(serverip,serverport,localip,s):
 	while True:
-		if type(asinnum("python")) == int:
-			hbjson = '{"cmd":"heartbeat","monitornum":"' + str(asinnum("python")) + '","ip":"' + localip + '","bindport":"9683"}'
+		monnum = monasin("monnum","")
+		if monnum > 0: 
+			hbjson = '{"cmd":"heartbeat","monitornum":"' + str(monnum) + '","ip":"' + localip + '","bindport":"9683"}'
 		else:
 			hbjson = '{"cmd":"heartbeat","monitornum":"0","ip":"' + localip + '","bindport":"9683"}'
 		hb_json = DesEncrypt(hbjson)
 		s.sendto(hb_json,(serverip,serverport))
 		print hbjson 
 		time.sleep(10)
+def rebuildCookie():
+	while True:
+		os.remove("cookie.txt")
+		os.remove("cookiejp.txt")
+		print("Delete cookie.txt")
+		print("Delete cookiejp.txt")
+		os.mknod("cookie.txt") 
+		os.mknod("cookiejp.txt") 
+		print("Create cookie.txt")
+		print("Create cookiejp.txt")
+		time.sleep(60)
 
 def write(info,mode):
         f=file("monIPlist.txt",mode)
@@ -132,26 +152,55 @@ def acc(serverip,serverpot,localip,s):
 				s.sendto(baserepose,(serverip,serverport))
 			elif cmd == "start_mon":		
 				asin = cmdjson["asin"]
+				#areacode = cmdjson["areacode"]
 				#ip = cmdjson["ip"]
 				#port = cmdjson["port"]
-				print cmd,asin
-				screen = 'screen'
-				arg = '-dmS'
-				title = 'Amazon' + asin
-				m = 'python'
-				t = 'amazon.de'
-				cmd = "%s %s %s %s %s %s" % (screen,arg,title,m,t,asin)
-				print cmd
-				os.popen(cmd)
-				time.sleep(2)
-				monasin = asinsearch("python")
-				monasinStr = ";".join(monasin)
-				repose = '{"cmd":"start_mon_return","status":"OK","ip":"' + localip + '","bindport":"9683","asin":"'+ monasinStr +'"}'
+				asinar = cmdjson["areacode"]
+				print cmd,asin,asinar
+				if asinar == "DE":
+					price = monasin("asinpriceDE",asin)
+					print(asin,price)
+					#print cmd,asin,areacode
+					screen = 'screen'
+					arg = '-dmS'
+					title = 'Amazon' + asin + '_DE'
+					m = 'python'
+					t = 'amazon.de'
+					cmd = "%s %s %s %s %s %s %s" % (screen,arg,title,m,t,asin,price)
+					print cmd
+					os.popen(cmd)
+					time.sleep(2)
+				elif asinar == "JP":
+					price = monasin("asinpriceJP",asin)
+					print(asin,price)
+					#print cmd,asin,areacode
+					screen = 'screen'
+					arg = '-dmS'
+					title = 'Amazon_' + asin + '_JP'
+					m = 'python'
+					t = 'amazon.jp'
+					cmd = "%s %s %s %s %s %s %s" % (screen,arg,title,m,t,asin,price)
+					print cmd
+					os.popen(cmd)
+					time.sleep(2)
+				else:
+					print "Amazon area is NULL......"
+					return
+				#monasin = asinsearch("python")
+				#monasinStr = ";".join(monasin)
+				monasindata = monasin("monasin","")
+				repose = '{"cmd":"start_mon_return","status":"OK","ip":"' + localip + '","bindport":"9683","asin":"'+ str(monasindata) +'"}'
 				print repose
 				monrepose = DesEncrypt(repose)
 				s.sendto(monrepose,(serverip,serverport))
 			elif cmd == "login_succ":
 				print("Login success....")
+			elif cmd == "stop_mon":
+				asin = cmdjson["asin"]
+				stopmon = monasin("killasin",asin)
+				repose = '{"cmd":"stop_mon_return","asin":"' + asin  + '","status":"OK"}'
+                                print repose
+                                monrepose = DesEncrypt(repose)
 			elif cmd == "updatepool":
 				mode = "w"
 				ipnum = len(cmdjson["ippool"])
@@ -174,7 +223,7 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
 s.bind(("",9683))
-ip = print_ifaces_data()
+ip = (urllib.urlopen('http://ipv4.icanhazip.com/').read()).strip('\n')
 num = 0
 Login(serverip,serverport,ip,s)
 threads = []
@@ -182,7 +231,8 @@ t1 = threading.Thread(target=heartbeat,args=(serverip,serverport,ip,s))
 threads.append(t1)
 t2 = threading.Thread(target=acc,args=(serverip,serverport,ip,s))
 threads.append(t2)
-
+t3 = threading.Thread(target=rebuildCookie)
+threads.append(t3)
 if __name__ == '__main__':
 	for t in threads:
 		t.setDaemon(True)

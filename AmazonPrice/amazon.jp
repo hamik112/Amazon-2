@@ -1,10 +1,12 @@
-# coding=utf-8
+#!/usr/bin/env python
+## -*- coding: utf-8 -*-
 from concurrent import futures
 import urllib2
 import datetime
 import time
 import requests
 from lxml import html
+from lxml import etree 
 import urllib,urllib2,httplib,cookielib,os,sys
 from bs4 import BeautifulSoup
 import lxml.html
@@ -27,6 +29,12 @@ def DesDecrypt(str):
         k = des(Des_Key, ECB, pad=None, padmode=PAD_PKCS5)
         DecryptStr = k.decrypt(base64.b64decode(str))
         return DecryptStr
+def amazonDe(arg):
+        t = 'amazon.sh'
+        cmd = "./%s %s" % (t,arg)
+        session = os.popen(cmd).read()
+        session = session.strip('\n')
+        return session
 
 def udp_send(ID):
 	host = '' # Bind to all interfaces
@@ -128,7 +136,7 @@ def getText(nodelist):
 
 ASIN = sys.argv[1]
 tmpprice = sys.argv[2]
-URLS = ['http://www.amazon.de/dp/'+ ASIN +'?m=A3JWKAKR8XB7XF']
+URLS = ['http://www.amazon.jp/dp/'+ ASIN +'?m=AN1VRQENFRJN5']
 num = 1
 
 pattern = '^[a-z]{6}$'
@@ -147,27 +155,32 @@ for iv in des_iv:
         Des_IV = bytes(getText(iv.childNodes))
         print Des_IV
 
-def load_url(url, timeout, ASIN ,tmpprice):
+def load_url(url, timeout, ASIN, tmpprice):
 	#ip = sys.argv[1]
 	#port = int(sys.argv[2])
 	XPATH_SELECTOR = '//span[@id="priceblock_ourprice"]'
 	SLEEP_INTERVAL = 1
-	
 	#cookiejar=cookielib.MozillaCookieJar()
-	filename = 'cookie.txt'
+	filename = 'cookiejp.txt'
 	cookiejar=cookielib.MozillaCookieJar(filename)
 	file = open(filename)
 	cookielines = file.readlines(100)
 	if cookielines:
-		cookiejar.load('cookie.txt', ignore_discard=True, ignore_expires=True)
+		cookiejar.load('cookiejp.txt', ignore_discard=True, ignore_expires=True)
 	else:
 		print("NULL COOKIE")	
 		cookiejar=cookielib.MozillaCookieJar(filename)
 	cj=urllib2.HTTPCookieProcessor(cookiejar)
 	opener=urllib2.build_opener(cj)
 	price = get_page(opener,url)
+	os.remove('data')
+	local2 = open('data', 'w')
+	local2.write(price)
+	local2.close()
+	
 	tree = html.fromstring(price)
-	if "Bot Check" in price:
+	#print tree.text_content()
+	if "Amazon CAPTCHA" in price:
 		print "(～ o ～)~zZ: Sleep................"
 		IMG_SELECTOR = '//img'
                 imgsrc = tree.xpath(IMG_SELECTOR)
@@ -184,12 +197,12 @@ def load_url(url, timeout, ASIN ,tmpprice):
 		inputsrc = tree.xpath(AMZN_SELECTOR)
 		for amzn in inputsrc:
 			amzn_list = amzn.attrib["value"]
-		amzn_url = 'http://www.amazon.de/errors/validateCaptcha?amzn=' + amzn_list + '&amzn-r=/dp/' + ASIN +'?m=A3JWKAKR8XB7XF&amzn-pt=Detail&field-keywords=' + captcha
+		amzn_url = 'http://www.amazon.co.jp/errors/validateCaptcha?amzn=' + amzn_list + '&amzn-r=/dp/' + ASIN +'?m=AN1VRQENFRJN5&amzn-pt=Gateway&field-keywords=' + captcha
 		price1 = get_page(opener,amzn_url)
 		tree1 = html.fromstring(price1)
 		cookiejar.save(ignore_discard=True, ignore_expires=True) 
 		if "priceblock_ourprice" in price1:
-                        price2 = float(tree1.xpath(XPATH_SELECTOR)[0].text[3:].replace(',','.'))
+                        price2 = int(amazonDe("getprice"))
                         print datetime.datetime.now(),ASIN,price2
                         amdate = datetime.datetime.now()
                         print num
@@ -209,13 +222,13 @@ def load_url(url, timeout, ASIN ,tmpprice):
 		#alarm = '{"cmd":"CODESAPPEA"}'
 		#udp_send2(alarm,"127.0.0.1",9683)
 	else:
-		if "priceblock_ourprice" in price:	
-			price1 = float(tree.xpath(XPATH_SELECTOR)[0].text[3:].replace(',','.'))
+		if "priceblock_ourprice" in price:
+			price1 = int(amazonDe("getprice"))
 			print datetime.datetime.now(),ASIN,price1
 			amdate = datetime.datetime.now()
 			print num
 			info = str(amdate) +"	"+ str(price1) +"	"+ ASIN +"\n"
-			if (price1 <  tmpprice):
+			if (price1 < tmpprice):
 				if (num > 20):
 					udp_send(ASIN)
 					global num

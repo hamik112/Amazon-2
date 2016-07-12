@@ -1,12 +1,10 @@
-#!/usr/bin/env python
-## -*- coding: utf-8 -*-
+# coding=utf-8
 from concurrent import futures
 import urllib2
 import datetime
 import time
 import requests
 from lxml import html
-from lxml import etree 
 import urllib,urllib2,httplib,cookielib,os,sys
 from bs4 import BeautifulSoup
 import lxml.html
@@ -29,12 +27,6 @@ def DesDecrypt(str):
         k = des(Des_Key, ECB, pad=None, padmode=PAD_PKCS5)
         DecryptStr = k.decrypt(base64.b64decode(str))
         return DecryptStr
-def amazonDe(arg,path):
-        t = 'amazon.sh'
-        cmd = "./%s %s %s" % (t,arg,path)
-        session = os.popen(cmd).read()
-        session = session.strip('\n')
-        return session
 
 def udp_send(ID):
 	host = '' # Bind to all interfaces
@@ -122,6 +114,13 @@ def get_page(opener,url,data={}):
 		#log(content,url);
 		return content
 
+def amazonDe(arg,path):
+        t = 'amazon.sh'
+        cmd = "./%s %s %s" % (t,arg,path)
+        session = os.popen(cmd).read()
+        session = session.strip('\n')
+        return session
+
 def write(info):
 	f=file("hello.txt","a+")
 	f.write(info)
@@ -135,9 +134,8 @@ def getText(nodelist):
         return rc	
 
 ASIN = sys.argv[1]
-tmpprice = int(sys.argv[2])
-print type(tmpprice)
-URLS = ['http://www.amazon.jp/dp/'+ ASIN +'?m=AN1VRQENFRJN5']
+tmpprice = sys.argv[2]
+URLS = ['https://www.amazon.co.jp/gp/aw/d/'+ ASIN +'?m=AN1VRQENFRJN5']
 num = 1
 
 pattern = '^[a-z]{6}$'
@@ -156,12 +154,10 @@ for iv in des_iv:
         Des_IV = bytes(getText(iv.childNodes))
         print Des_IV
 
-def load_url(url, timeout, ASIN, tmpprice):
-	#ip = sys.argv[1]
-	#port = int(sys.argv[2])
-	XPATH_SELECTOR = '//span[@id="priceblock_ourprice"]'
+def load_url(url, timeout, ASIN ,tmpprice):
+	OFFERID_SELECTOR = '//form[@id="addToCart"]/input[@name="oid"]/@value' 
 	SLEEP_INTERVAL = 1
-	#cookiejar=cookielib.MozillaCookieJar()
+	
 	filename = 'cookiejp.txt'
 	cookiejar=cookielib.MozillaCookieJar(filename)
 	file = open(filename)
@@ -174,7 +170,8 @@ def load_url(url, timeout, ASIN, tmpprice):
 	cj=urllib2.HTTPCookieProcessor(cookiejar)
 	opener=urllib2.build_opener(cj)
 	price = get_page(opener,url)
-	asinpath = './' + ASIN
+	tree = html.fromstring(price)
+	asinpath = './mobildata/' + ASIN
 	datapath = asinpath + '/data'
 	if os.path.isdir(asinpath):
 		pass
@@ -188,9 +185,6 @@ def load_url(url, timeout, ASIN, tmpprice):
 	local2 = open(datapath, 'w')
 	local2.write(price)
 	local2.close()
-	
-	tree = html.fromstring(price)
-	#print tree.text_content()
 	if "Amazon CAPTCHA" in price:
 		print "(～ o ～)~zZ: Sleep................"
 		IMG_SELECTOR = '//img'
@@ -208,59 +202,54 @@ def load_url(url, timeout, ASIN, tmpprice):
 		inputsrc = tree.xpath(AMZN_SELECTOR)
 		for amzn in inputsrc:
 			amzn_list = amzn.attrib["value"]
-		amzn_url = 'http://www.amazon.co.jp/errors/validateCaptcha?amzn=' + amzn_list + '&amzn-r=/dp/' + ASIN +'?m=AN1VRQENFRJN5&amzn-pt=Gateway&field-keywords=' + captcha
+		amzn_url = 'http://www.amazon.co.jp/errors/validateCaptcha?amzn=' + amzn_list + '&amzn-r=/gp/aw/d/' + ASIN +'?m=AN1VRQENFRJN5&amzn-pt=DetailAW&field-keywords=' + captcha
 		price1 = get_page(opener,amzn_url)
 		tree1 = html.fromstring(price1)
 		cookiejar.save(ignore_discard=True, ignore_expires=True) 
-		if "priceblock_ourprice" in price1:
-			if "submit.add-to-cart-announce" in price:
-				price2 = int(amazonDe("getprice"),datapath)
-				offerid = amazonDe("getofferid",datapath)
-				print datetime.datetime.now(),ASIN,price2
-				amdate = datetime.datetime.now()
-				print num
-				sendinf = ASIN + '-' + offerid
-				print sendinf
-				info = str(amdate) +"   "+ str(price2) +"       "+ ASIN +"\n"
-				if (price2 < tmpprice):
-					if (num > 20):
-						udp_send(sendinf)
-						global num
-						num = 1
-						write(info)
-					else:
-						return
-				else:
-					return
-			else:
-				return
+		if "addToCart" in price1:
+			price2 = int(amazonDe("mob_jp_getprice",datapath)) 
+			offerid = tree1.xpath(OFFERID_SELECTOR)
+			sendinf = ASIN + '-' + offerid
+                        print sendinf
+			print datetime.datetime.now(),ASIN,price2
+                        amdate = datetime.datetime.now()
+                        print num
+                        info = str(amdate) +"   "+ str(price2) +"       "+ ASIN +"\n"
+                        if (price2 < tmpprice):
+                                if (num > 20):
+                                        udp_send(sendinf)
+                                        global num
+                                        num = 1
+                                        write(info)
+                                else:
+                                        return
+                        else:
+                                return
                 else:
                         print datetime.datetime.now(),ASIN,"NOTHING"
 		#alarm = '{"cmd":"CODESAPPEA"}'
 		#udp_send2(alarm,"127.0.0.1",9683)
 	else:
-		if "priceblock_ourprice" in price:
-			if "submit.add-to-cart-announce" in price:
-				price1 = int(amazonDe("getprice",datapath))
-				offerid = amazonDe("getofferid",datapath)
-				print datetime.datetime.now(),ASIN,price1
-				amdate = datetime.datetime.now()
-				print num
-				sendinf = ASIN + '-' + offerid
-				print sendinf
-				info = str(amdate) +"	"+ str(price1) +"	"+ ASIN +"\n"
-				if (price1 < tmpprice):
-					if (num > 20):
-						udp_send(sendinf)
-						global num
-						num = 1
-						write(info)
-					else:
-						return
+		if "addToCart" in price:
+                        price1 = int(amazonDe("mob_jp_getprice",datapath)) 
+			print price1
+			offerid = tree.xpath(OFFERID_SELECTOR)[0]
+			sendinf = ASIN + '-' + offerid
+			print sendinf 
+			print datetime.datetime.now(),ASIN,price1
+			amdate = datetime.datetime.now()
+			print num
+			info = str(amdate) +"	"+ str(price1) +"	"+ ASIN +"\n"
+			if (price1 <  tmpprice):
+				if (num > 20):
+					udp_send(sendinf)
+					global num
+					num = 1
+					write(info)
 				else:
 					return
 			else:
-				return
+				return	
 		else:
 			print datetime.datetime.now(),ASIN,"NOTHING"
 while True: 

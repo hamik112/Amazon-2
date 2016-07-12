@@ -151,6 +151,9 @@ def load_url(url, timeout, ASIN ,tmpprice):
 	#ip = sys.argv[1]
 	#port = int(sys.argv[2])
 	XPATH_SELECTOR = '//span[@id="priceblock_ourprice"]'
+	#OFFERID_SELECTOR = '//input[@id="offerListingID"]/@value'
+	OFFERID_SELECTOR = '//form[@id="addToCart"]/input[@id="offerListingID"]/@value' 
+	SELLID_SELECTOR = '//form[@id="addToCart"]/input[@id="sellingCustomerID"]/@value'
 	SLEEP_INTERVAL = 1
 	
 	#cookiejar=cookielib.MozillaCookieJar()
@@ -190,16 +193,35 @@ def load_url(url, timeout, ASIN ,tmpprice):
 		cookiejar.save(ignore_discard=True, ignore_expires=True) 
 		if "priceblock_ourprice" in price1:
                         price2 = float(tree1.xpath(XPATH_SELECTOR)[0].text[3:].replace(',','.'))
-                        print datetime.datetime.now(),ASIN,price2
+			offerid = tree1.xpath(OFFERID_SELECTOR)
+			sellid = tree1.xpath(SELLID_SELECTOR)
+			sendinf = ASIN + '-' + offerid
+                        print sendinf
+			print sellid
+			print datetime.datetime.now(),ASIN,price2
                         amdate = datetime.datetime.now()
                         print num
                         info = str(amdate) +"   "+ str(price2) +"       "+ ASIN +"\n"
                         if (price2 < tmpprice):
                                 if (num > 20):
-                                        udp_send(ASIN)
+                                        udp_send(sendinf)
                                         global num
                                         num = 1
                                         write(info)
+					asinpath = './' + ASIN
+					datapath = asinpath + '/data'
+					if os.path.isdir(asinpath):
+						pass
+					else:
+						os.mkdir(asinpath)
+					if os.path.exists(datapath):
+						os.remove(datapath)
+						os.mknod(datapath)
+					else:
+						os.mknod(datapath)
+					local2 = open(datapath, 'w')
+					local2.write(price)
+					local2.close()
                                 else:
                                         return
                         else:
@@ -211,16 +233,35 @@ def load_url(url, timeout, ASIN ,tmpprice):
 	else:
 		if "priceblock_ourprice" in price:	
 			price1 = float(tree.xpath(XPATH_SELECTOR)[0].text[3:].replace(',','.'))
+			offerid = tree.xpath(OFFERID_SELECTOR)
+			sellid = tree.xpath(SELLID_SELECTOR)
+			sendinf = ASIN + '-' + offerid
+			print sendinf 
+			print sellid
 			print datetime.datetime.now(),ASIN,price1
 			amdate = datetime.datetime.now()
 			print num
 			info = str(amdate) +"	"+ str(price1) +"	"+ ASIN +"\n"
 			if (price1 <  tmpprice):
 				if (num > 20):
-					udp_send(ASIN)
+					udp_send(sendinf)
 					global num
 					num = 1
 					write(info)
+					asinpath = './' + ASIN
+					datapath = asinpath + '/data'
+					if os.path.isdir(asinpath):
+						pass
+					else:
+						os.mkdir(asinpath)
+					if os.path.exists(datapath):
+						os.remove(datapath)
+						os.mknod(datapath)
+					else:
+						os.mknod(datapath)
+					local2 = open(datapath, 'w')
+					local2.write(price)
+					local2.close()
 				else:
 					return
 			else:

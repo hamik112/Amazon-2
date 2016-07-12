@@ -4,7 +4,8 @@ import os,sys,string,psutil,re,time,datetime,json
 from xml.dom.minidom import parse, parseString
 from pyDes import *
 import threading
-import urllib
+import linecache
+import urllib,urllib2,httplib,cookielib,os,sys,random
 
 logging.basicConfig(level=logging.DEBUG,
 	format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -17,6 +18,11 @@ def Login(serverip,serverport,localip,s):
 	print loginjson
 	des_json = DesEncrypt(loginjson)
 	s.sendto(des_json,(serverip,serverport))
+	monasindata = monasin("monasin","")
+	repose = '{"cmd":"start_mon_return","status":"OK","ip":"' + localip + '","bindport":"9683","asin":"'+ str(monasindata) +'"}'
+	print repose
+	monrepose = DesEncrypt(repose)
+	s.sendto(monrepose,(serverip,serverport))
 
 def monasin(arg,arg2):
 	t = 'amazon.sh'
@@ -24,6 +30,20 @@ def monasin(arg,arg2):
 	session = os.popen(cmd).read()
 	session = session.strip('\n')
 	return session
+
+def get_page(opener,url,data={}):
+        a = random.randrange(1, 9173)
+        ua = linecache.getline(r'ua_list.txt', a)
+        headers = {'User-Agent': ua}
+        postdata=urllib.urlencode(data)
+        if postdata:
+                request=urllib2.Request(url,postdata,headers=headers)
+        else:
+                request=urllib2.Request(url,headers=headers)
+                f = opener.open(request)
+                content = f.read()
+                #log(content,url);
+                return content
 
 #def asinsearch(processName):
 #	pids = psutil.pids()
@@ -108,15 +128,31 @@ for iv in des_iv:
 
 def heartbeat(serverip,serverport,localip,s):
 	while True:
-		monnum = monasin("monnum","")
-		if monnum > 0: 
-			hbjson = '{"cmd":"heartbeat","monitornum":"' + str(monnum) + '","ip":"' + localip + '","bindport":"9683"}'
+		num = monasin("getloginT","")
+		monasindata = monasin("monasin","")
+		print num
+		if int(num) > 30:
+			#Login(serverip,serverport,localip,s)			
+			print("Login time out,please check broker.....")
 		else:
-			hbjson = '{"cmd":"heartbeat","monitornum":"0","ip":"' + localip + '","bindport":"9683"}'
+			print("OK")
+		monnum = monasin("monnum","")
+		print monnum
+		if int(monnum) > 0: 
+			hbjson = '{"cmd":"heartbeat","monitornum":"' + str(monnum) + '","mon_asin_list":{"asin1":"' + monasindata  + '"},"ip":"' + localip + '","bindport":"9683"}'
+		else:
+			hbjson = '{"cmd":"heartbeat","monitornum":"0","mon_asin_list":{"asin1":""},"ip":"' + localip + '","bindport":"9683"}'
 		hb_json = DesEncrypt(hbjson)
 		s.sendto(hb_json,(serverip,serverport))
+		time.sleep(2)
+		#s.sendto(hb_json,(serverip,serverport))
+		#time.sleep(2)
+		#s.sendto(hb_json,(serverip,serverport))
+		#time.sleep(2)
 		print hbjson 
-		time.sleep(10)
+		time.sleep(6)
+
+
 def rebuildCookie():
 	while True:
 		os.remove("cookie.txt")
@@ -135,13 +171,20 @@ def write(info,mode):
 	f.write('\n')
         f.close()
 
+def loginstatus(info):
+	f=file("LoginStatus","a+")
+	f.write(info)
+	f.write('\n')
+	f.close()
+
 def acc(serverip,serverpot,localip,s):		
 	while True:
 		try:
 			data,address=s.recvfrom(9683)
-			deCode = DesDecrypt(data) 
+			deCode = DesDecrypt(data)
 			print deCode
 			cmdjson = json.loads(deCode)
+			print cmdjson
 			cmd = cmdjson["cmd"]
 			if cmd == "CODESAPPEA":
 				processinfo("python")
@@ -163,10 +206,10 @@ def acc(serverip,serverpot,localip,s):
 					#print cmd,asin,areacode
 					screen = 'screen'
 					arg = '-dmS'
-					title = 'Amazon' + asin + '_DE'
+					title = 'Amazon_' + asin + '_DE'
 					m = 'python'
-					t = 'amazon.de'
-					cmd = "%s %s %s %s %s %s %s" % (screen,arg,title,m,t,asin,price)
+					t = 'amazon_list.de'
+					cmd = "%s %s %s %s %s %s" % (screen,arg,title,m,t,asin)
 					print cmd
 					os.popen(cmd)
 					time.sleep(2)
@@ -178,8 +221,8 @@ def acc(serverip,serverpot,localip,s):
 					arg = '-dmS'
 					title = 'Amazon_' + asin + '_JP'
 					m = 'python'
-					t = 'amazon.jp'
-					cmd = "%s %s %s %s %s %s %s" % (screen,arg,title,m,t,asin,price)
+					t = 'amazon_list.jp'
+					cmd = "%s %s %s %s %s %s" % (screen,arg,title,m,t,asin)
 					print cmd
 					os.popen(cmd)
 					time.sleep(2)
@@ -201,12 +244,26 @@ def acc(serverip,serverpot,localip,s):
 				repose = '{"cmd":"stop_mon_return","asin":"' + asin  + '","status":"OK"}'
                                 print repose
                                 monrepose = DesEncrypt(repose)
+				s.sendto(monrepose,(serverip,serverport))
 			elif cmd == "updatepool":
+				logintime = bytes(int(round(time.time())))
+				loginif = logintime + ';1'
+				loginstatus(loginif)
+				cookiejar=cookielib.MozillaCookieJar()
+				cj=urllib2.HTTPCookieProcessor(cookiejar)
+				opener=urllib2.build_opener(cj)
+				url = 'http://' + cmdjson["ippool"] 
+				try:
+					iplist = get_page(opener,url).strip('\n').split('\n')
+				except:
+					traceback.print_exc()
 				mode = "w"
-				ipnum = len(cmdjson["ippool"])
+				#ipnum = len(cmdjson["ippool"])
+				ipnum = len(iplist)
 				for i in range(ipnum):
-					i += 1
-					ip = cmdjson["ippool"]["ip" + str(i)]
+					i -= 1
+					#ip = cmdjson["ippool"]["ip" + str(i)]
+					ip = iplist[i]
 					write(ip,mode)
 					mode = "a+"
 			else:
@@ -223,11 +280,16 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
 s.bind(("",9683))
+s1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s1.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s1.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
+s1.bind(("",9684))
 ip = (urllib.urlopen('http://ipv4.icanhazip.com/').read()).strip('\n')
 num = 0
 Login(serverip,serverport,ip,s)
 threads = []
-t1 = threading.Thread(target=heartbeat,args=(serverip,serverport,ip,s))
+t1 = threading.Thread(target=heartbeat,args=(serverip,serverport,ip,s1))
 threads.append(t1)
 t2 = threading.Thread(target=acc,args=(serverip,serverport,ip,s))
 threads.append(t2)

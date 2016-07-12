@@ -34,7 +34,34 @@ case "$1" in
 	asinpriceJP)
 		cat JP.ail |grep $2|awk -F";" '{print $3}'
 		;;
+	getloginT)
+		lasttime=`cat LoginStatus |tail -1|awk -F";" '{print $1}'`
+		nowtime=`date '+%s'`
+		num=$[ $nowtime - $lasttime ]
+		echo $num
+		;;
+	getofferid)
+		cat $2 |grep 'id="offerListingID" name="offerListingID"'|awk -F"\"" '{print $8}'
+		;;
+	mob_de_getprice)
+		cat $2 |grep "</b>&nbsp;EUR"|awk -F"EUR " '{print $2}'|awk -F"&nbsp;" '{print $1}'|sed 's/,/./g'
+		;;
+	mob_jp_getprice)
+		cat $2 |grep "i:&nbsp;" |awk -F"\\" '{print $2}'|awk -F"<" '{print $1}'|sed 's/,//g'
+		;;
+	getjsonofferid)
+		cat $2 | grep offerListingID | sed 's/\\//g' | awk -F"'" '{print $4}'
+		;;
+	getJPoffid)
+		cat $2 | sed "s/'+String.fromCharCode(0x27)+'//g" | sed "s/'+String.fromCharCode(0x0A)+'//g" | sed 's/ //g' | grep offerListingID |awk -F":" '{print $2}' |awk -F"," '{print $1}'
+		;;
+	getPriceStatus)
+		cat $2 | grep "submit.addToCart"
+		;;
+	getListOid)
+		cat $2 | grep -C 5 "/gp/aw/c.html/ref=olp_atc_new_1" | grep oid | head -n 1 | awk -F'"' '{print $ 6}'
+		;;
 	getprice)
-		cat data|grep priceblock_ourprice|grep "￥" | awk -F">" '{print $2}'|awk -F"<" '{print $1}'|awk '{print $2}'|sed 's/,//g'
+		cat $2|grep priceblock_ourprice|grep "￥" | awk -F">" '{print $2}'|awk -F"<" '{print $1}'|awk '{print $2}'|sed 's/,//g'
 
 esac

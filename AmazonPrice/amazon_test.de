@@ -1,12 +1,10 @@
-#!/usr/bin/env python
-## -*- coding: utf-8 -*-
+# coding=utf-8
 from concurrent import futures
 import urllib2
 import datetime
 import time
 import requests
 from lxml import html
-from lxml import etree 
 import urllib,urllib2,httplib,cookielib,os,sys
 from bs4 import BeautifulSoup
 import lxml.html
@@ -29,12 +27,6 @@ def DesDecrypt(str):
         k = des(Des_Key, ECB, pad=None, padmode=PAD_PKCS5)
         DecryptStr = k.decrypt(base64.b64decode(str))
         return DecryptStr
-def amazonDe(arg,path):
-        t = 'amazon.sh'
-        cmd = "./%s %s %s" % (t,arg,path)
-        session = os.popen(cmd).read()
-        session = session.strip('\n')
-        return session
 
 def udp_send(ID):
 	host = '' # Bind to all interfaces
@@ -108,10 +100,13 @@ def tcp_send(list):
 	return DesDecrypt(data)
 	tcpCliSock.close()
 
-def get_page(opener,url,data={}):
+def get_page(opener,url,ASIN,data={}):
 	a = random.randrange(1, 9173)
-	ua = linecache.getline(r'ua_list.txt', a)
-	headers = {'User-Agent': ua} 
+        ua = linecache.getline(r'ua_list.txt', a)
+	headers = {'Referer': 'http://www.amazon.de/dp/' + ASIN  + '?m=A3JWKAKR8XB7XF',
+		'User-Agent': ua,
+		'Host': 'www.amazon.de'
+		} 
 	postdata=urllib.urlencode(data)
 	if postdata:
 		request=urllib2.Request(url,postdata,headers=headers)
@@ -121,6 +116,13 @@ def get_page(opener,url,data={}):
 		content = f.read()
 		#log(content,url);
 		return content
+
+def amazonDe(arg,path):
+        t = 'amazon.sh'
+        cmd = "./%s %s %s" % (t,arg,path)
+        session = os.popen(cmd).read()
+        session = session.strip('\n')
+        return session
 
 def write(info):
 	f=file("hello.txt","a+")
@@ -135,9 +137,8 @@ def getText(nodelist):
         return rc	
 
 ASIN = sys.argv[1]
-tmpprice = int(sys.argv[2])
-print type(tmpprice)
-URLS = ['http://www.amazon.jp/dp/'+ ASIN +'?m=AN1VRQENFRJN5']
+PASIN = sys.argv[2]
+URLS = ['http://www.amazon.de/gp/twister/dimension?asinList=' + ASIN  + '&vs=1&exclusiveMerchantId=A3JWKAKR8XB7XF&productTypeDefinition=GROCERY&productGroupId=grocery_display_on_website&storeId=grocery&parentAsin=' + PASIN + '&isPrime=0&nodeID=340846031&isOneClickEnabled=0&webpSupport=1&fastRenderTreatment=C']
 num = 1
 
 pattern = '^[a-z]{6}$'
@@ -156,42 +157,24 @@ for iv in des_iv:
         Des_IV = bytes(getText(iv.childNodes))
         print Des_IV
 
-def load_url(url, timeout, ASIN, tmpprice):
-	#ip = sys.argv[1]
-	#port = int(sys.argv[2])
+def load_url(url, timeout, ASIN ,tmpprice):
 	XPATH_SELECTOR = '//span[@id="priceblock_ourprice"]'
 	SLEEP_INTERVAL = 1
-	#cookiejar=cookielib.MozillaCookieJar()
-	filename = 'cookiejp.txt'
+	
+	filename = 'cookie.txt'
 	cookiejar=cookielib.MozillaCookieJar(filename)
 	file = open(filename)
 	cookielines = file.readlines(100)
 	if cookielines:
-		cookiejar.load('cookiejp.txt', ignore_discard=True, ignore_expires=True)
+		cookiejar.load('cookie.txt', ignore_discard=True, ignore_expires=True)
 	else:
 		print("NULL COOKIE")	
 		cookiejar=cookielib.MozillaCookieJar(filename)
 	cj=urllib2.HTTPCookieProcessor(cookiejar)
 	opener=urllib2.build_opener(cj)
-	price = get_page(opener,url)
-	asinpath = './' + ASIN
-	datapath = asinpath + '/data'
-	if os.path.isdir(asinpath):
-		pass
-	else:
-		os.mkdir(asinpath)
-	if os.path.exists(datapath):
-		os.remove(datapath)
-		os.mknod(datapath)
-	else:
-		os.mknod(datapath)
-	local2 = open(datapath, 'w')
-	local2.write(price)
-	local2.close()
-	
-	tree = html.fromstring(price)
-	#print tree.text_content()
-	if "Amazon CAPTCHA" in price:
+	price = get_page(opener,url,ASIN)
+	print price
+	if "Bot Check" in price:
 		print "(～ o ～)~zZ: Sleep................"
 		IMG_SELECTOR = '//img'
                 imgsrc = tree.xpath(IMG_SELECTOR)
@@ -208,63 +191,52 @@ def load_url(url, timeout, ASIN, tmpprice):
 		inputsrc = tree.xpath(AMZN_SELECTOR)
 		for amzn in inputsrc:
 			amzn_list = amzn.attrib["value"]
-		amzn_url = 'http://www.amazon.co.jp/errors/validateCaptcha?amzn=' + amzn_list + '&amzn-r=/dp/' + ASIN +'?m=AN1VRQENFRJN5&amzn-pt=Gateway&field-keywords=' + captcha
-		price1 = get_page(opener,amzn_url)
-		tree1 = html.fromstring(price1)
+		amzn_url = 'http://www.amazon.de/errors/validateCaptcha?amzn=' + amzn_list + '&amzn-r=/dp/' + ASIN +'?m=A3JWKAKR8XB7XF&amzn-pt=Detail&field-keywords=' + captcha
+		price1 = get_page(opener,amzn_url,ASIN)
 		cookiejar.save(ignore_discard=True, ignore_expires=True) 
-		if "priceblock_ourprice" in price1:
-			if "submit.add-to-cart-announce" in price:
-				price2 = int(amazonDe("getprice"),datapath)
-				offerid = amazonDe("getofferid",datapath)
-				print datetime.datetime.now(),ASIN,price2
-				amdate = datetime.datetime.now()
-				print num
-				sendinf = ASIN + '-' + offerid
-				print sendinf
-				info = str(amdate) +"   "+ str(price2) +"       "+ ASIN +"\n"
-				if (price2 < tmpprice):
-					if (num > 20):
-						udp_send(sendinf)
-						global num
-						num = 1
-						write(info)
-					else:
-						return
-				else:
-					return
-			else:
-				return
-                else:
-                        print datetime.datetime.now(),ASIN,"NOTHING"
-		#alarm = '{"cmd":"CODESAPPEA"}'
-		#udp_send2(alarm,"127.0.0.1",9683)
-	else:
-		if "priceblock_ourprice" in price:
-			if "submit.add-to-cart-announce" in price:
-				price1 = int(amazonDe("getprice",datapath))
-				offerid = amazonDe("getofferid",datapath)
-				print datetime.datetime.now(),ASIN,price1
-				amdate = datetime.datetime.now()
-				print num
-				sendinf = ASIN + '-' + offerid
-				print sendinf
-				info = str(amdate) +"	"+ str(price1) +"	"+ ASIN +"\n"
-				if (price1 < tmpprice):
-					if (num > 20):
-						udp_send(sendinf)
-						global num
-						num = 1
-						write(info)
-					else:
-						return
-				else:
-					return
-			else:
-				return
+		pricetmp = price1.split('[')[1].split(']')[0]
+		pricejson = json.loads(pricetmp)
+		priceAsin = pricejson[u"price"]
+		Asin = pricejson[u"asin"]
+		pricestatus = pricejson[u"isAvailable"]
+		time = datetime.datetime.now()
+		print num
+		print "%s\t%s\t%s\t%s"%(time,Asin,priceAsin,pricestatus)
+		if priceAsin == None:
+			return
 		else:
-			print datetime.datetime.now(),ASIN,"NOTHING"
+			if pricestatus == True:
+				if (num > 20):
+					udp_send(ASIN)
+					global num
+					num = 1
+				else:
+					return
+			else:
+				return
+	else:
+		pricetmp = price.split('[')[1].split(']')[0]
+		pricejson = json.loads(pricetmp)
+		priceAsin = pricejson[u"price"]
+		Asin = pricejson[u"asin"]
+		pricestatus = pricejson[u"isAvailable"]
+		time = datetime.datetime.now()
+		print num
+		print "%s\t%s\t%s\t%s"%(time,Asin,priceAsin,pricestatus)
+		if priceAsin == None:
+			return
+		else:
+			if pricestatus == True:
+				if (num > 20):
+					udp_send(ASIN)
+					global num
+					num = 1
+				else:
+					return
+			else:
+				return
 while True: 
 	with futures.ThreadPoolExecutor(max_workers=10) as executor:
 	    num += 1
-	    future_to_url = dict((executor.submit(load_url, url, 60, ASIN, tmpprice), url)
+	    future_to_url = dict((executor.submit(load_url, url, 60, ASIN, PASIN), url)
 				 for url in URLS)

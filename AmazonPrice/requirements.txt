@@ -1,0 +1,7 @@
+futures
+lxml
+bs4
+pyDes
+netifaces
+psutil
+requests

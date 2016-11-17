@@ -1,0 +1,262 @@
+# coding=utf-8
+from concurrent import futures
+import urllib2
+import datetime
+import time
+import requests
+from lxml import html
+import urllib,urllib2,httplib,cookielib,os,sys
+from bs4 import BeautifulSoup
+import lxml.html
+import socket, traceback
+import random
+import linecache  
+import base64
+from pyDes import *
+from xml.dom.minidom import parse, parseString
+from socket import *
+import re
+import json
+
+def DesEncrypt(str):
+        k = des(Des_Key, ECB, pad=None, padmode=PAD_PKCS5)
+        EncryptStr = k.encrypt(str)
+        return base64.b64encode(EncryptStr)
+
+def DesDecrypt(str):
+        k = des(Des_Key, ECB, pad=None, padmode=PAD_PKCS5)
+        DecryptStr = k.decrypt(base64.b64decode(str))
+        return DecryptStr
+
+def udp_send(ID):
+	host = '' # Bind to all interfaces
+	port = 1234
+	print "python UDP multi case server test"
+	s = socket(AF_INET, SOCK_DGRAM)
+	s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+	s.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+	s.bind((host, port))
+	ID1 = DesEncrypt(ID)
+	print ID1
+	PORT = 19121
+	file = open("monIPlist.txt")
+ 
+	while 1:
+		lines = file.readlines(100000)
+		print lines
+		if not lines:
+			return	
+		for IP in lines:
+			for i in range(1,2):
+				try:
+					print IP
+					s.sendto(ID1,(IP, PORT))
+				except (KeyboardInterrupt, SystemExit):
+					raise
+				except:
+					traceback.print_exc()
+		return
+	
+def udp_send2(ID,IP,PORT):
+	host = '' # Bind to all interfaces
+	port = 1234
+	print "python UDP multi case server test"
+	s = socket(AF_INET, SOCK_DGRAM)
+	s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+	s.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+	s.bind((host, port))
+	ID1 = DesEncrypt(ID)
+	print ID1
+	for i in range(1,2):
+		try:
+			s.sendto(ID1,(IP, PORT))
+		except (KeyboardInterrupt, SystemExit):
+			raise
+		except:
+			traceback.print_exc()
+	return
+
+def tcp_send(list):
+	HOST = '103.236.223.152'
+	PORT = 9683
+	BUFSIZE = 1024
+	ADDR = (HOST,PORT)
+	tcpCliSock = socket(AF_INET, SOCK_STREAM)
+	tcpCliSock.settimeout(5.0)
+	tcpCliSock.connect(ADDR)
+	try:
+		data = '{"cmd":"resolve_captcha","url":"' + list +'"}'
+		des_data = DesEncrypt(data)
+		if not data:
+			return 
+		tcpCliSock.send(des_data)
+		data = tcpCliSock.recv(BUFSIZE)
+		if not data:
+			return
+		print 'Server: ', DesDecrypt(data)
+	except Exception,e:
+		print 'Error: ',e
+
+	return DesDecrypt(data)
+	tcpCliSock.close()
+
+def get_page(opener,url,ASIN,data={}):
+	a = random.randrange(1, 9173)
+        ua = linecache.getline(r'ua_list.txt', a)
+	headers = {'Referer': 'http://www.amazon.co.jp/dp/' + ASIN,
+		'User-Agent': ua,
+		'Host': 'www.amazon.co.jp'
+		} 
+	postdata=urllib.urlencode(data)
+	if postdata:
+		request=urllib2.Request(url,postdata,headers=headers)
+	else:
+		request=urllib2.Request(url,headers=headers)
+		f = opener.open(request)
+		content = f.read()
+		#log(content,url);
+		return content
+
+def amazonDe(arg,path):
+        t = 'amazon.sh'
+        cmd = "./%s %s %s" % (t,arg,path)
+        session = os.popen(cmd).read()
+        session = session.strip('\n')
+        return session
+
+def write(info):
+	f=file("hello.txt","a+")
+	f.write(info)
+	f.close()
+
+def getText(nodelist):
+        rc = ""
+        for node in nodelist:
+                if node.nodeType == node.TEXT_NODE:
+                        rc = rc + node.data
+        return rc	
+
+ASIN = sys.argv[1]
+PASIN = sys.argv[2]
+#URLS = ['http://www.amazon.co.jp/gp/twister/dimension?asinList=' + ASIN + '&vs=1&exclusiveMerchantId=AN1VRQENFRJN5&productTypeDefinition=GROCERY&productGroupId=grocery_display_on_website&storeId=grocery&parentAsin=' + PASIN  + '&isPrime=0&nodeID=340846031&isOneClickEnabled=0&webpSupport=1&fastRenderTreatment=C']
+URLS = ['https://www.amazon.co.jp/gp/twister/update?asin=' + ASIN + '&productTypeDefinition=HOME&productGroupId=home_display_on_website&parentAsin=' + PASIN + '&isPrime=0&isOneClickEnabled=0&fastRenderTreatment=T1&webpSupport=1&vs=1']
+num = 1
+
+pattern = '^[a-z]{6}$'
+regex = re.compile(pattern)
+
+dom1 = parse('broker.xml')
+config_element = dom1.getElementsByTagName("config")[0]
+des_key = config_element.getElementsByTagName("Des_Key")
+for key in des_key:
+        Des_Key = bytes(getText(key.childNodes))
+        print Des_Key
+
+
+des_iv = config_element.getElementsByTagName("Des_IV")
+for iv in des_iv:
+        Des_IV = bytes(getText(iv.childNodes))
+        print Des_IV
+
+def load_url(url, timeout, ASIN ,tmpprice):
+	XPATH_SELECTOR = '//span[@id="priceblock_ourprice"]'
+	SLEEP_INTERVAL = 1
+	
+	filename = 'cookiejp.txt'
+	cookiejar=cookielib.MozillaCookieJar(filename)
+	file = open(filename)
+	cookielines = file.readlines(100)
+	if cookielines:
+		cookiejar.load('cookiejp.txt', ignore_discard=True, ignore_expires=True)
+	else:
+		print("NULL COOKIE")	
+		cookiejar=cookielib.MozillaCookieJar(filename)
+	cj=urllib2.HTTPCookieProcessor(cookiejar)
+	opener=urllib2.build_opener(cj)
+	price = get_page(opener,url,ASIN)
+	print price
+	asinpath = './mobildata/' + ASIN
+        datapath = asinpath + '/data'
+        if os.path.isdir(asinpath):
+                pass
+        else:
+                os.mkdir(asinpath)
+        if os.path.exists(datapath):
+                os.remove(datapath)
+                os.mknod(datapath)
+        else:
+                os.mknod(datapath)
+        local2 = open(datapath, 'w')
+        local2.write(price)
+        local2.close()
+#	getPriceStatus = amazonDe("getajax",datapath)
+#	print getPriceStatus	
+#	oid = 'eo86sfprppqp2phrvr7iruujwnOY5onFwY5TqLOxNF8gg9Bis0l9PLfimDIlh1evU0HJFP0B%2BP70giqGD0LIYNliKV7W7Ct768yeujkm8Hs%3D'
+#	sendinfo = asin + '-' + oid
+#	print sendinfo
+#	if "bot check" in price:
+#		print "(～ o ～)~zz: sleep................"
+#		img_selector = '//img'
+#                imgsrc = tree.xpath(img_sELECTOR)
+#                for href in imgsrc:
+#                        list = href.attrib["src"]
+#                        if "captcha" in list:
+#				captcha_str = tcp_send(list)
+#				captcha_json = json.loads(captcha_str)
+#				captcha = captcha_json["captcha_str"]
+#				re_result = regex.match(captcha)
+#                                if re_result:
+#					print captcha
+#		amzn_selector = '//input[@name="amzn"]'
+#		inputsrc = tree.xpath(amzN_SELECTOR)
+#		for amzn in inputsrc:
+#			amzn_list = amzn.attrib["value"]
+#		amzn_url = 'http://www.amazon.de/errors/validateCaptcha?amzn=' + amzn_list + '&amzn-r=/dp/' + ASIN +'?m=A3JWKAKR8XB7XF&amzn-pt=Detail&field-keywords=' + captcha
+#		price1 = get_page(opener,amzn_url,ASIN)
+#		cookiejar.save(ignore_discard=True, ignore_expires=True) 
+#		pricetmp = price1.split('[')[1].split(']')[0]
+#		pricejson = json.loads(pricetmp)
+#		priceasin = pricejson[u"price"]
+#		asin = pricejson[u"asin"]
+#		pricestatus = pricejson[u"isAvailable"]
+#		time = datetime.datetime.now()
+#		print num
+#		print "%s\t%s\t%s\t%s"%(time,Asin,priceAsin,pricestatus)
+#		if priceasin == none:
+#			return
+#		else:
+#			if pricestatus == True:
+#				if (num > 20):
+#					udp_send(sendinfo)
+#					global num
+#					num = 1
+#				else:
+#					return
+#			else:
+#				return
+#	else:
+#		pricetmp = price.split('[')[1].split(']')[0]
+#		pricejson = json.loads(pricetmp)
+#		priceasin = pricejson[u"price"]
+#		asin = pricejson[u"asin"]
+#		pricestatus = pricejson[u"isAvailable"]
+#		time = datetime.datetime.now()
+#		print num
+#		print "%s\t%s\t%s\t%s"%(time,Asin,priceAsin,pricestatus)
+#		if priceasin == none:
+#			return
+#		else:
+#			if pricestatus == True:
+#				if (num > 20):
+#					udp_send(sendinfo)
+#					global num
+#					num = 1
+#				else:
+#					return
+#			else:
+#				return
+while True: 
+	with futures.ThreadPoolExecutor(max_workers=10) as executor:
+	    num += 1
+	    future_to_url = dict((executor.submit(load_url, url, 60, ASIN, PASIN), url)
+				 for url in URLS)

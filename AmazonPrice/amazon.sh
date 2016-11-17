@@ -61,6 +61,28 @@ case "$1" in
 	getListOid)
 		cat $2 | grep -C 5 "/gp/aw/c.html/ref=olp_atc_new_1" | grep oid | head -n 1 | awk -F'"' '{print $ 6}'
 		;;
+	getTigerStatus)
+		cat $2|grep spec_stock_msg | awk -F">" '{print $2}' | awk -F"<" '{print $1}'
+		;;
+	sendmail)
+		echo "狮子上货---虎牌官网" | mail -s "Tiger in Stock" 2438622910@qq.com,159945@qq.com
+		;;
+	sendmailRosman)
+		case "$2" in
+		aptamil1+)
+			echo "徳爱1+上货---R家" | mail -s "Aptamil 1+ (5*600g) in Stock" 2438622910@qq.com,719203291@qq.com,1918025591@qq.com,728066927@qq.com,1046839810@qq.com,553465002@qq.com,317847903@qq.com
+			;;
+		aptamil2+)
+			echo "徳爱2+上货---R家" | mail -s "Aptamil 2+ (5*600g) in Stock" 2438622910@qq.com,719203291@qq.com,1918025591@qq.com,728066927@qq.com,1046839810@qq.com,553465002@qq.com,317847903@qq.com
+			;;
+		HA3)
+			echo "徳爱HA3上货---R家" | mail -s "Aptamil HA3 (4*600g) in Stock" 2438622910@qq.com,305911192@qq.com
+			;;
+		esac
+		;;
+	getajax)
+		cat $2 |grep "ajaxUrlParams"
+		;;
 	getprice)
 		cat $2|grep priceblock_ourprice|grep "￥" | awk -F">" '{print $2}'|awk -F"<" '{print $1}'|awk '{print $2}'|sed 's/,//g'
 

@@ -1,0 +1,11 @@
+# Netscape HTTP Cookie File
+# http://www.netscape.com/newsref/std/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+www.rossmannversand.de	FALSE	/	FALSE		ASP.NET_SessionId	e5kyzd45kdxmhc25fwtepl45
+www.rossmannversand.de	FALSE	/	FALSE	1470389888	ActiveModule	0
+www.rossmannversand.de	FALSE	/	FALSE	1472940000	CART	a81e13f7-3045-4dd7-9c80-73913bed8d61
+www.rossmannversand.de	FALSE	/	FALSE	1472940000	CART_FILIALE	0
+www.rossmannversand.de	FALSE	/	FALSE		Esperantus_Language_eEvolutionCMS	de
+www.rossmannversand.de	FALSE	/	FALSE		PortalAlias	eEvolutionCMS
+www.rossmannversand.de	FALSE	/	FALSE	1470383206	Rainbow_WinMgmt	c639e877-7298-493c-a58f-c2d75a254447

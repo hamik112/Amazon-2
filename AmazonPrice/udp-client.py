@@ -12,10 +12,10 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
 data = "Data from pc"
-s.bind(("",2345))
+s.bind(("",19122))
 while True:
     try:
-        data,address=s.recvfrom(2345)
+        data,address=s.recvfrom(19122)
         print "cli get data form", address, ":", data
         #s.sendto("client ack", address)
 	#data,address = s.recvfrom(1024)
